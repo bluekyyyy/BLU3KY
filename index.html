@@ -1,0 +1,527 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Arjun Balasubramanian - Cybersecurity Portfolio</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@300;400;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary-color: #00ffff;
+            --secondary-color: #008f8f;
+            --background-start: #0a0a2a;
+            --background-end: #000000;
+            --text-color: #e0e0e0;
+            --glow-color: rgba(0, 255, 255, 0.7);
+            --card-glow-color: rgba(0, 255, 255, 0.2);
+        }
+        body {
+            font-family: 'Roboto Mono', monospace;
+            background-color: var(--background-end);
+            background-image: 
+                radial-gradient(ellipse at top, var(--background-start), var(--background-end)),
+                linear-gradient(rgba(0, 255, 255, 0.05) 1px, transparent 1px), 
+                linear-gradient(90deg, rgba(0, 255, 255, 0.05) 1px, transparent 1px);
+            background-size: 100% 100%, 35px 35px;
+            background-attachment: fixed;
+            color: var(--text-color);
+            overflow-x: hidden;
+        }
+        ::-webkit-scrollbar {
+            width: 12px;
+        }
+        ::-webkit-scrollbar-track {
+            background: var(--background-end);
+        }
+        ::-webkit-scrollbar-thumb {
+            background: linear-gradient(180deg, var(--primary-color), var(--secondary-color));
+            border-radius: 6px;
+            border: 2px solid var(--background-end);
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: linear-gradient(180deg, #00ffff, #00b3b3);
+        }
+
+        #matrix-canvas {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -1; opacity: 0.3;
+        }
+        .neon-text {
+            color: #fff;
+            text-shadow: 0 0 7px var(--primary-color), 0 0 10px var(--primary-color), 0 0 21px var(--primary-color), 0 0 42px var(--glow-color), 0 0 82px var(--glow-color);
+            animation: flicker 1.5s infinite alternate;
+        }
+        @keyframes flicker {
+            0%, 18%, 22%, 25%, 53%, 57%, 100% { text-shadow: 0 0 4px #fff, 0 0 11px var(--primary-color), 0 0 19px var(--primary-color), 0 0 40px var(--glow-color), 0 0 80px var(--glow-color); }
+            20%, 24%, 55% { text-shadow: none; }
+        }
+        .section-title {
+            color: var(--primary-color); text-shadow: 0 0 10px var(--glow-color); animation: title-glitch 4s infinite linear;
+        }
+        @keyframes title-glitch {
+            0%, 48%, 52%, 70%, 74%, 100% { transform: skewX(0); }
+            50% { transform: skewX(0.8deg); }
+            72% { transform: skewX(-0.8deg); }
+        }
+        nav a {
+            position: relative; text-decoration: none; color: var(--text-color); transition: all 0.3s ease;
+        }
+        nav a:hover, nav a.active {
+            color: var(--primary-color); text-shadow: 0 0 15px var(--glow-color);
+        }
+        nav a::after {
+            content: ''; position: absolute; width: 100%; transform: scaleX(0); height: 2px; bottom: -5px; left: 0; background-color: var(--primary-color); transform-origin: bottom right; transition: transform 0.3s ease-out; box-shadow: 0 0 10px var(--primary-color);
+        }
+        nav a:hover::after, nav a.active::after {
+            transform: scaleX(1); transform-origin: bottom left;
+        }
+        .cybr-btn {
+            background: linear-gradient(145deg, rgba(0, 40, 40, 0.6), rgba(0, 80, 80, 0.7)); border: 2px solid var(--secondary-color); color: var(--primary-color); text-shadow: 0 0 5px var(--glow-color); transition: all 0.3s ease; padding: 0.75rem 1.5rem; border-radius: 0.25rem; display: inline-block; position: relative; overflow: hidden;
+        }
+        .cybr-btn:hover {
+            transform: translateY(-3px); background: linear-gradient(145deg, var(--secondary-color), var(--primary-color)); color: #fff; border-color: var(--primary-color); box-shadow: 0 0 25px var(--glow-color);
+        }
+        .page-section {
+            display: none; /* Hide all sections by default */
+            min-height: calc(100vh - 6rem);
+            padding-top: 4rem;
+            padding-bottom: 4rem;
+            animation: fadeIn 0.8s ease-out;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .animated-item {
+            opacity: 0; transform: translateY(40px) rotateX(-10deg); transform-origin: top center; transition: opacity 0.8s ease-out, transform 0.8s ease-out;
+        }
+        .animated-item.is-visible {
+            opacity: 1; transform: translateY(0) rotateX(0deg);
+        }
+        .hover-card {
+            border: 1px solid var(--secondary-color); border-radius: 0.5rem; transition: all 0.4s ease; background: linear-gradient(145deg, rgba(10, 25, 47, 0.75), rgba(10, 25, 47, 0.4)); backdrop-filter: blur(8px);
+        }
+        .hover-card:hover {
+            transform: translateY(-10px); border-color: var(--primary-color); box-shadow: 0 10px 30px var(--card-glow-color);
+        }
+        .progress-bar-container {
+            background-color: rgba(0, 95, 95, 0.5); border-radius: 5px; overflow: hidden; margin-top: 8px; position: relative;
+        }
+        .progress-bar {
+            height: 8px; background-color: var(--primary-color); border-radius: 5px; box-shadow: 0 0 8px var(--glow-color); transition: width 2s ease-in-out; width: 0; position: relative; overflow: hidden;
+        }
+        .progress-bar::after {
+            content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: linear-gradient(90deg, rgba(255,255,255,0) 0%, rgba(255,255,255,0.3) 50%, rgba(255,255,255,0) 100%); animation: shimmer 2s infinite linear;
+        }
+        @keyframes shimmer {
+            0% { transform: translateX(-100%); } 100% { transform: translateX(100%); }
+        }
+        .progress-percentage {
+             color: var(--primary-color); font-size: 0.9rem; opacity: 0; transition: opacity 1s ease 0.5s;
+        }
+        .team-member-img:hover {
+            box-shadow: 0 0 25px var(--glow-color);
+        }
+        .input-field {
+            background: linear-gradient(145deg, rgba(17, 24, 39, 0.7), rgba(10, 25, 47, 0.5)); border: 1px solid var(--secondary-color); transition: all 0.3s ease;
+        }
+        .input-field:focus {
+            outline: none; border-color: var(--primary-color); box-shadow: 0 0 15px var(--card-glow-color);
+        }
+        .social-icon {
+            color: var(--text-color);
+            transition: all 0.3s ease;
+        }
+        .social-icon:hover {
+            color: var(--primary-color);
+            transform: scale(1.2) translateY(-2px);
+            filter: drop-shadow(0 0 8px var(--glow-color));
+        }
+        .timeline-container {
+            position: relative;
+        }
+        .timeline-container::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0;
+            bottom: 0;
+            width: 2px;
+            background: linear-gradient(to bottom, var(--primary-color), var(--secondary-color), transparent);
+        }
+    </style>
+</head>
+<body class="text-gray-200">
+
+    <canvas id="matrix-canvas"></canvas>
+
+    <header class="bg-black/50 backdrop-blur-sm sticky top-0 left-0 right-0 z-50 border-b border-cyan-900/50 shadow-lg shadow-cyan-900/10">
+        <nav class="container mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-16">
+                <a href="#home" class="nav-link text-2xl font-bold neon-text">BLU3KY</a>
+                <div class="hidden md:flex space-x-4">
+                    <a href="#home" class="nav-link px-2 py-2 text-sm font-medium active">Home</a>
+                    <a href="#about" class="nav-link px-2 py-2 text-sm font-medium">About</a>
+                    <a href="#team" class="nav-link px-2 py-2 text-sm font-medium">Team</a>
+                    <a href="#skills" class="nav-link px-2 py-2 text-sm font-medium">Skills</a>
+                    <a href="#projects" class="nav-link px-2 py-2 text-sm font-medium">Projects</a>
+                    <a href="#experience" class="nav-link px-2 py-2 text-sm font-medium">Experience</a>
+                    <a href="#achievements" class="nav-link px-2 py-2 text-sm font-medium">Achievements</a>
+                    <a href="#certifications" class="nav-link px-2 py-2 text-sm font-medium">Certifications</a>
+                    <a href="#contact" class="nav-link px-2 py-2 text-sm font-medium">Contact</a>
+                </div>
+                <div class="md:hidden"><button id="mobile-menu-button" class="text-gray-300 hover:text-white focus:outline-none"><svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7" /></svg></button></div>
+            </div>
+        </nav>
+        <div id="mobile-menu" class="md:hidden hidden bg-black/80">
+            <a href="#home" class="nav-link block py-2 px-4 text-sm active">Home</a>
+            <a href="#about" class="nav-link block py-2 px-4 text-sm">About</a>
+            <a href="#team" class="nav-link block py-2 px-4 text-sm">Team</a>
+            <a href="#skills" class="nav-link block py-2 px-4 text-sm">Skills</a>
+            <a href="#projects" class="nav-link block py-2 px-4 text-sm">Projects</a>
+            <a href="#experience" class="nav-link block py-2 px-4 text-sm">Experience</a>
+            <a href="#achievements" class="nav-link block py-2 px-4 text-sm">Achievements</a>
+            <a href="#certifications" class="nav-link block py-2 px-4 text-sm">Certifications</a>
+            <a href="#contact" class="nav-link block py-2 px-4 text-sm">Contact</a>
+        </div>
+    </header>
+
+    <main class="container mx-auto px-4 sm:px-6 lg:px-8">
+        <!-- Home Section -->
+        <section id="home" class="page-section flex flex-col items-center justify-center text-center">
+            <h1 id="matrix-name" class="text-5xl md:text-7xl font-bold mb-4 neon-text" data-text="Arjun Balasubramanian"></h1>
+            <p id="subtitle" class="text-lg md:text-2xl text-cyan-400 opacity-0"></p>
+            <div id="home-buttons" class="mt-8 flex flex-wrap justify-center gap-4 opacity-0">
+                <a href="/assets/resume.pdf" download class="cybr-btn">Download CV</a>
+                <a href="https://www.linkedin.com/in/arjun-balasubramanian/" target="_blank" class="cybr-btn">LinkedIn</a>
+                <a href="#projects" class="nav-link cybr-btn">Show My Work</a>
+            </div>
+        </section>
+
+        <!-- About Section -->
+        <section id="about" class="page-section flex-col items-center justify-center">
+            <div class="max-w-5xl w-full text-center">
+                <h2 class="text-4xl font-bold mb-12 section-title animated-item">About Me</h2>
+                <div class="flex flex-col md:flex-row items-center gap-12">
+                    <div class="md:w-1/4 w-1/2 animated-item"><img src="/assets/Arjun.jpg" draggable="false" alt="Arjun Balasubramanian" class="rounded-lg border-2 border-cyan-700 shadow-lg shadow-cyan-500/20 hover:shadow-cyan-400/50 transition-shadow duration-300"></div>
+                    <div class="md:w-3/4 text-left animated-item">
+                        <!-- UPDATED: Added text-justify class -->
+                        <p class="text-lg leading-relaxed mb-6 text-justify">I am a passionate and results-driven Cybersecurity Professional with a knack for digital forensics, ethical hacking, and network security. My journey into the world of cyber defense is fueled by a relentless curiosity and a commitment to protecting digital assets from emerging threats. I thrive in dynamic environments, constantly learning and adapting to the ever-evolving landscape of cybersecurity. My goal is to leverage my skills to build resilient and secure systems.</p>
+                        <div class="flex justify-start space-x-6">
+                            <a href="https://www.linkedin.com/in/arjun-balasubramanian" target="_blank" class="social-icon"><svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"></path><rect x="2" y="9" width="4" height="12"></rect><circle cx="4" cy="4" r="2"></circle></svg></a>
+                            <a href="https://www.instagram.com/arjuuuun___" target="_blank" class="social-icon"><svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line></svg></a>
+                            <a href="https://github.com/bluekyyyy" target="_blank" class="social-icon"><svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"></path></svg></a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+        <!-- Team Section -->
+        <section id="team" class="page-section flex-col items-center justify-center">
+            <div class="max-w-7xl w-full text-center">
+                <div class="mb-12 animated-item"><h2 class="text-4xl font-bold mb-2 section-title">Binary Misfits</h2><p class="text-lg mb-4">CTF-Focused Cybersecurity Team | Exploit Development</p><a href="https://www.linkedin.com/in/b1n4rym15f1t5/" target="_blank" class="cybr-btn">Team LinkedIn</a></div>
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-10 justify-center">
+                    <div class="text-center animated-item hover-card p-4"><img src="/assets/Arjun.jpg" draggable="false" alt="Team Member" class="team-member-img w-32 h-32 rounded-full mx-auto mb-4 border-2 border-cyan-700 transition-all duration-300"><h3 class="text-xl font-bold text-cyan-400">Arjun.B</h3><p class="text-sm text-cyan-300/70 italic">"BLU3KY"</p><p class="text-gray-400">Reverse Engineer</p><div class="mt-3 flex justify-center gap-3"><a href="#" target="_blank" class="text-xs cybr-btn !p-2">GitHub</a><a href="#" target="_blank" class="text-xs cybr-btn !p-2">LinkedIn</a></div></div>
+                    <div class="text-center animated-item hover-card p-4"><img src="/assets/jaswanth.png" draggable="false" alt="Team Member" class="team-member-img w-32 h-32 rounded-full mx-auto mb-4 border-2 border-cyan-700 transition-all duration-300"><h3 class="text-xl font-bold text-cyan-400">Elavarasan.T</h3><p class="text-sm text-cyan-300/70 italic">"HexPh4r04h"</p><p class="text-gray-400">Pwn & Exploitation</p><div class="mt-3 flex justify-center gap-3"><a href="#" target="_blank" class="text-xs cybr-btn !p-2">GitHub</a><a href="#" target="_blank" class="text-xs cybr-btn !p-2">LinkedIn</a></div></div>
+                    <div class="text-center animated-item hover-card p-4"><img src="https://placehold.co/200x200/0a0a2a/00ffff?text=MEMBER" draggable="false" alt="Team Member" class="team-member-img w-32 h-32 rounded-full mx-auto mb-4 border-2 border-cyan-700 transition-all duration-300"><h3 class="text-xl font-bold text-cyan-400">Nithila.R</h3><p class="text-sm text-cyan-300/70 italic">"LUNA"</p><p class="text-gray-400">Web Security</p><div class="mt-3 flex justify-center gap-3"><a href="#" target="_blank" class="text-xs cybr-btn !p-2">GitHub</a><a href="#" target="_blank" class="text-xs cybr-btn !p-2">LinkedIn</a></div></div>
+                    <div class="text-center animated-item hover-card p-4"><img src="/assets/goushal.jpeg" draggable="false" alt="Team Member" class="team-member-img w-32 h-32 rounded-full mx-auto mb-4 border-2 border-cyan-700 transition-all duration-300"><h3 class="text-xl font-bold text-cyan-400">Goushal.K</h3><p class="text-sm text-cyan-300/70 italic">"JellyBean"</p><p class="text-gray-400">Forensics Expert</p><div class="mt-3 flex justify-center gap-3"><a href="#" target="_blank" class="text-xs cybr-btn !p-2">GitHub</a><a href="#" target="_blank" class="text-xs cybr-btn !p-2">LinkedIn</a></div></div>
+                    <div class="text-center animated-item hover-card p-4"><img src="/assets/aswath.png" draggable="false" alt="Team Member" class="team-member-img w-32 h-32 rounded-full mx-auto mb-4 border-2 border-cyan-700 transition-all duration-300"><h3 class="text-xl font-bold text-cyan-400">Aswath.A V</h3><p class="text-sm text-cyan-300/70 italic">"45HH"</p><p class="text-gray-400">OSINT Specialist</p><div class="mt-3 flex justify-center gap-3"><a href="#" target="_blank" class="text-xs cybr-btn !p-2">GitHub</a><a href="#" target="_blank" class="text-xs cybr-btn !p-2">LinkedIn</a></div></div>
+                    <div class="text-center animated-item hover-card p-4"><img src="/assets/harish.jpg" draggable="false" alt="Team Member" class="team-member-img w-32 h-32 rounded-full mx-auto mb-4 border-2 border-cyan-700 transition-all duration-300"><h3 class="text-xl font-bold text-cyan-400">Harish.K P</h3><p class="text-sm text-cyan-300/70 italic">"H4r15h"</p><p class="text-gray-400">Cryptographer</p><div class="mt-3 flex justify-center gap-3"><a href="#" target="_blank" class="text-xs cybr-btn !p-2">GitHub</a><a href="#" target="_blank" class="text-xs cybr-btn !p-2">LinkedIn</a></div></div>
+                    <div class="text-center animated-item hover-card p-4"><img src="https://placehold.co/200x200/0a0a2a/00ffff?text=MEMBER" draggable="false" alt="Team Member" class="team-member-img w-32 h-32 rounded-full mx-auto mb-4 border-2 border-cyan-700 transition-all duration-300"><h3 class="text-xl font-bold text-cyan-400">Lakshitha.S</h3><p class="text-sm text-cyan-300/70 italic">"L4K1"</p><p class="text-gray-400">Malware Analyst</p><div class="mt-3 flex justify-center gap-3"><a href="#" target="_blank" class="text-xs cybr-btn !p-2">GitHub</a><a href="#" target="_blank" class="text-xs cybr-btn !p-2">LinkedIn</a></div></div>
+                    <div class="text-center animated-item hover-card p-4"><img src="https://placehold.co/200x200/0a0a2a/00ffff?text=MEMBER" draggable="false" alt="Team Member" class="team-member-img w-32 h-32 rounded-full mx-auto mb-4 border-2 border-cyan-700 transition-all duration-300"><h3 class="text-xl font-bold text-cyan-400">Padmesh.S</h3><p class="text-sm text-cyan-300/70 italic">"DUDU"</p><p class="text-gray-400">Malware Analyst</p><div class="mt-3 flex justify-center gap-3"><a href="#" target="_blank" class="text-xs cybr-btn !p-2">GitHub</a><a href="#" target="_blank" class="text-xs cybr-btn !p-2">LinkedIn</a></div></div>
+            </div>
+        </section>
+                </div>
+            </div>
+        </section>
+
+        <!-- Skills Section -->
+        <section id="skills" class="page-section flex-col items-center justify-center">
+            <div class="max-w-5xl w-full text-center">
+                <h2 class="text-4xl font-bold mb-12 section-title animated-item">Technical Skills</h2>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                    <div class="animated-item skill-item"><div class="flex justify-between items-center mb-1"><h3 class="font-bold text-cyan-400">Penetration Testing</h3><span class="progress-percentage text-sm font-bold">0%</span></div><p class="text-sm mb-2">Metasploit, Burp Suite, Nmap</p><div class="progress-bar-container"><div class="progress-bar" data-width="90%"></div></div></div>
+                    <div class="animated-item skill-item"><div class="flex justify-between items-center mb-1"><h3 class="font-bold text-cyan-400">Network Security</h3><span class="progress-percentage text-sm font-bold">0%</span></div><p class="text-sm mb-2">Firewalls, IDS/IPS, Wireshark</p><div class="progress-bar-container"><div class="progress-bar" data-width="85%"></div></div></div>
+                    <div class="animated-item skill-item"><div class="flex justify-between items-center mb-1"><h3 class="font-bold text-cyan-400">Digital Forensics</h3><span class="progress-percentage text-sm font-bold">0%</span></div><p class="text-sm mb-2">EnCase, FTK, Volatility</p><div class="progress-bar-container"><div class="progress-bar" data-width="75%"></div></div></div>
+                    <div class="animated-item skill-item"><div class="flex justify-between items-center mb-1"><h3 class="font-bold text-cyan-400">Programming</h3><span class="progress-percentage text-sm font-bold">0%</span></div><p class="text-sm mb-2">Python, Bash, PowerShell</p><div class="progress-bar-container"><div class="progress-bar" data-width="95%"></div></div></div>
+                    <div class="animated-item skill-item"><div class="flex justify-between items-center mb-1"><h3 class="font-bold text-cyan-400">Cloud Security</h3><span class="progress-percentage text-sm font-bold">0%</span></div><p class="text-sm mb-2">AWS, Azure Security Center</p><div class="progress-bar-container"><div class="progress-bar" data-width="70%"></div></div></div>
+                    <div class="animated-item skill-item"><div class="flex justify-between items-center mb-1"><h3 class="font-bold text-cyan-400">OS Security</h3><span class="progress-percentage text-sm font-bold">0%</span></div><p class="text-sm mb-2">Linux Hardening, Windows Security</p><div class="progress-bar-container"><div class="progress-bar" data-width="80%"></div></div></div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Projects Section -->
+        <section id="projects" class="page-section flex-col items-center justify-center">
+            <div class="max-w-6xl w-full text-center">
+                <h2 class="text-4xl font-bold mb-12 section-title animated-item">Projects</h2>
+                <div class="grid md:grid-cols-2 gap-8">
+                    <div class="animated-item hover-card p-6 flex flex-col"><div class="flex-grow"><h3 class="text-xl font-bold text-cyan-400 mb-2">Threat Intelligence Platform</h3><p class="text-sm mb-4 text-justify">Developed a platform to aggregate and analyze threat intelligence feeds, providing real-time alerts on emerging threats.</p></div><div class="mt-auto flex gap-4 justify-center"><a href="https://github.com/your-username/project-1" target="_blank" class="cybr-btn text-sm w-full text-center">Link</a><a href="assets/project1_report.pdf" download class="cybr-btn text-sm w-full text-center">Download</a></div></div>
+                    <div class="animated-item hover-card p-6 flex flex-col"><div class="flex-grow"><h3 class="text-xl font-bold text-cyan-400 mb-2">Automated Malware Analysis Sandbox</h3><p class="text-sm mb-4 text-justify">Built an isolated sandbox environment using Cuckoo Sandbox to automatically analyze suspicious files and URLs.</p></div><div class="mt-auto flex gap-4 justify-center"><a href="https://github.com/your-username/project-2" target="_blank" class="cybr-btn text-sm w-full text-center">Link</a><a href="assets/project2_report.pdf" download class="cybr-btn text-sm w-full text-center">Download</a></div></div>
+                    <div class="animated-item hover-card p-6 flex flex-col"><div class="flex-grow"><h3 class="text-xl font-bold text-cyan-400 mb-2">Phishing Campaign Simulation</h3><p class="text-sm mb-4 text-justify">Designed and executed a controlled phishing campaign to assess employee security awareness and provide targeted training.</p></div><div class="mt-auto flex gap-4 justify-center"><a href="https://github.com/your-username/project-3" target="_blank" class="cybr-btn text-sm w-full text-center">Link</a><a href="assets/project3_report.pdf" download class="cybr-btn text-sm w-full text-center">Download</a></div></div>
+                    <div class="animated-item hover-card p-6 flex flex-col"><div class="flex-grow"><h3 class="text-xl font-bold text-cyan-400 mb-2">Custom Network Scanner</h3><p class="text-sm mb-4 text-justify">A Python-based tool for discovering open ports, running services, and potential vulnerabilities on a local network.</p></div><div class="mt-auto flex gap-4 justify-center"><a href="https://github.com/your-username/project-4" target="_blank" class="cybr-btn text-sm w-full text-center">Link</a><a href="assets/project4_report.pdf" download class="cybr-btn text-sm w-full text-center">Download</a></div></div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Experience Section -->
+        <section id="experience" class="page-section flex-col items-center justify-center">
+            <div class="max-w-4xl w-full">
+                <h2 class="text-4xl font-bold mb-12 section-title text-center animated-item">Professional Experience</h2>
+                <div class="timeline-container ml-4">
+                    <!-- Item 1 -->
+                    <div class="relative mb-10 animated-item">
+                        <div class="absolute -left-4 top-1 w-8 h-8 bg-cyan-500 rounded-full border-4 border-gray-900 animate-pulse" style="animation-duration: 2s;"></div>
+                        <div class="ml-12">
+                            <h3 class="text-xl font-bold text-cyan-400">Cybersecurity Analyst</h3>
+                            <p class="text-sm text-gray-400 mb-1">SecureTech Inc. | 2021 - Present</p>
+                            <p class="text-gray-300 text-justify">Monitored network traffic for suspicious activity, conducted vulnerability assessments, and responded to security incidents. Contributed to a 20% reduction in false positive alerts.</p>
+                        </div>
+                    </div>
+                    <!-- Item 2 -->
+                    <div class="relative animated-item">
+                        <div class="absolute -left-4 top-1 w-8 h-8 bg-cyan-500 rounded-full border-4 border-gray-900 animate-pulse" style="animation-duration: 2s; animation-delay: 0.5s"></div>
+                        <div class="ml-12">
+                            <h3 class="text-xl font-bold text-cyan-400">IT Security Intern</h3>
+                            <p class="text-sm text-gray-400 mb-1">DataCorp | Summer 2020</p>
+                            <p class="text-gray-300 text-justify">Assisted the security team with policy updates, user access reviews, and security awareness training materials.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Achievements Section -->
+        <section id="achievements" class="page-section flex-col items-center justify-center">
+            <div class="max-w-4xl w-full">
+                <h2 class="text-4xl font-bold mb-12 section-title text-center animated-item">Achievements & CTFs</h2>
+                <div class="space-y-8">
+                    <div class="animated-item hover-card p-4"><h3 class="text-xl font-bold text-cyan-400">🏆 1st Place - WARGAMES CTF</h3><p class="text-sm text-gray-400 mb-2">Hack The Planet Cyber Conclave</p><p class="mb-3 text-justify">Intense competition testing skills in cybersecurity, OSINT, and exploit development.</p><p class="text-xs mb-3">Team 'Binary Misfits': Aswath A V, Elavarasan Thandapani</p><a href="https://linkedin.com/in/your-post-url" target="_blank" class="cybr-btn text-xs">View on LinkedIn →</a></div>
+                    <div class="animated-item hover-card p-4"><h3 class="text-xl font-bold text-cyan-400">🥈 2nd Place - HackOps CTF</h3><p class="text-sm text-gray-400 mb-2">TechIgnite Sparkle Conclave</p><p class="mb-3 text-justify">A challenging CTF with a great set of problems that put our skills to the test.</p><p class="text-xs mb-3">Teammate: Nithila RajeshKumar</p><a href="https://linkedin.com/in/your-post-url" target="_blank" class="cybr-btn text-xs">View on LinkedIn →</a></div>
+                    <div class="animated-item hover-card p-4"><h3 class="text-xl font-bold text-cyan-400">🏆 Winners - COSMOS CTF</h3><p class="text-sm text-gray-400 mb-2">National Space Day Event</p><p class="mb-3 text-justify">Secured the top position in this space-themed national CTF event.</p><p class="text-xs mb-3">Teammates: Elavarasan Thandapani, Aswath A V, Gunjan Soni</p><a href="https://linkedin.com/in/your-post-url" target="_blank" class="cybr-btn text-xs">View on LinkedIn →</a></div>
+                </div>
+            </div>
+        </section>
+        
+        <!-- Certifications Section -->
+        <section id="certifications" class="page-section flex-col items-center justify-center">
+            <div class="max-w-6xl w-full text-center">
+                <h2 class="text-4xl font-bold mb-12 section-title animated-item">Certifications</h2>
+                <div class="grid md:grid-cols-2 gap-8">
+                    <div class="animated-item hover-card p-6">
+                        <img src="https://placehold.co/800x550/0a0a2a/00ffff?text=CERTIFICATE+1" alt="Certificate Image" class="w-full h-auto rounded-lg border-2 border-cyan-800 mb-6">
+                        <h3 class="text-2xl font-bold text-cyan-400 mb-4">Certified Ethical Hacker (CEH)</h3>
+                        <div class="flex gap-4 justify-center">
+                            <a href="https://www.credly.com/your-badge-url" target="_blank" class="cybr-btn">View Credential</a>
+                            <a href="assets/ceh_certificate.pdf" download class="cybr-btn">Download PDF</a>
+                        </div>
+                    </div>
+                     <div class="animated-item hover-card p-6">
+                        <img src="https://placehold.co/800x550/0a0a2a/00ffff?text=CERTIFICATE+2" alt="Certificate Image" class="w-full h-auto rounded-lg border-2 border-cyan-800 mb-6">
+                        <h3 class="text-2xl font-bold text-cyan-400 mb-4">CompTIA Security+</h3>
+                        <div class="flex gap-4 justify-center">
+                            <a href="https://www.credly.com/your-badge-url" target="_blank" class="cybr-btn">View Credential</a>
+                            <a href="assets/secplus_certificate.pdf" download class="cybr-btn">Download PDF</a>
+                        </div>
+                    </div>
+                    <div class="animated-item hover-card p-6">
+                        <img src="https://placehold.co/800x550/0a0a2a/00ffff?text=CERTIFICATE+3" alt="Certificate Image" class="w-full h-auto rounded-lg border-2 border-cyan-800 mb-6">
+                        <h3 class="text-2xl font-bold text-cyan-400 mb-4">Offensive Security Certified Professional (OSCP)</h3>
+                        <div class="flex gap-4 justify-center">
+                            <a href="https://www.credly.com/your-badge-url" target="_blank" class="cybr-btn">View Credential</a>
+                            <a href="assets/oscp_certificate.pdf" download class="cybr-btn">Download PDF</a>
+                        </div>
+                    </div>
+                     <div class="animated-item hover-card p-6">
+                        <img src="https://placehold.co/800x550/0a0a2a/00ffff?text=CERTIFICATE+4" alt="Certificate Image" class="w-full h-auto rounded-lg border-2 border-cyan-800 mb-6">
+                        <h3 class="text-2xl font-bold text-cyan-400 mb-4">Certified Information Systems Security Professional (CISSP)</h3>
+                        <div class="flex gap-4 justify-center">
+                            <a href="https://www.credly.com/your-badge-url" target="_blank" class="cybr-btn">View Credential</a>
+                            <a href="assets/cissp_certificate.pdf" download class="cybr-btn">Download PDF</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Contact Section -->
+         
+        <section id="contact" class="page-section flex-col items-center justify-center">
+            <div class="max-w-2xl w-full">
+                <h2 class="text-4xl font-bold mb-6 text-center section-title animated-item">Contact Me</h2>
+                <p class="text-center mb-8 animated-item">Have a question or want to work together? Send me a message.</p>
+                <form action="https://formspree.io/f/YOUR_FORMSPREE_ENDPOINT_URL" method="POST" class="animated-item">
+                    <div class="mb-4">
+                        <input type="text" name="name" placeholder="Your Name" class="w-full p-3 rounded input-field" required>
+                    </div>
+                    <div class="mb-4">
+                        <input type="email" name="email" placeholder="Your Email" class="w-full p-3 rounded input-field" required>
+                    </div>
+                    <div class="mb-4">
+                        <textarea name="message" rows="5" placeholder="Your Message" class="w-full p-3 rounded input-field" required></textarea>
+                    </div>
+                    <div class="text-center">
+                        <button type="submit" class="cybr-btn font-bold py-3 px-8 rounded">Send Message</button>
+                    </div>
+                </form>
+            </div>
+        </section>
+    </main>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const canvas = document.getElementById('matrix-canvas');
+            const ctx = canvas.getContext('2d');
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+            const alphabet = 'アァカサタナハマヤャラワガザダバパイィキシチニヒミリヰギジヂビピウゥクスツヌフムユュルグズブヅプエェケセテネヘメレヱゲゼデベペオォコソトノホモヨョロヲゴゾドボポヴッンABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
+            const fontSize = 16;
+            let columns = Math.floor(canvas.width / fontSize);
+            let rainDrops = Array.from({ length: columns }).map(() => 1);
+
+            function drawMatrix() {
+                const gradient = ctx.createLinearGradient(0, 0, canvas.width, canvas.height);
+                const hue = (Date.now() / 50) % 360;
+                gradient.addColorStop(0, `hsla(${hue}, 90%, 15%, 0.05)`);
+                gradient.addColorStop(1, `hsla(${(hue + 60) % 360}, 90%, 15%, 0.05)`);
+                ctx.fillStyle = gradient;
+                ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+                ctx.fillStyle = '#0ff';
+                ctx.font = fontSize + 'px monospace';
+                for (let i = 0; i < rainDrops.length; i++) {
+                    const text = alphabet.charAt(Math.floor(Math.random() * alphabet.length));
+                    ctx.fillText(text, i * fontSize, rainDrops[i] * fontSize);
+                    if (rainDrops[i] * fontSize > canvas.height && Math.random() > 0.975) {
+                        rainDrops[i] = 0;
+                    }
+                    rainDrops[i]++;
+                }
+            }
+            setInterval(drawMatrix, 33);
+
+            window.addEventListener('resize', () => {
+                canvas.width = window.innerWidth;
+                canvas.height = window.innerHeight;
+                columns = Math.floor(canvas.width / fontSize);
+                rainDrops = Array.from({ length: columns }).map(() => 1);
+            });
+
+            const nameElement = document.getElementById('matrix-name');
+            if (nameElement) {
+                const finalName = nameElement.getAttribute('data-text');
+                const subtitleElement = document.getElementById('subtitle');
+                const homeButtons = document.getElementById('home-buttons');
+                const finalSubtitle = "Cybersecurity Enthusiast | Ethical Hacker | CTF Player";
+                const chars = '!<>-_\\/[]{}—=+*^?#________';
+                let revealTimeout;
+                function revealName() {
+                    let iteration = 0;
+                    clearInterval(revealTimeout);
+                    revealTimeout = setInterval(() => {
+                        nameElement.textContent = finalName.split('').map((letter, index) => (index < iteration) ? finalName[index] : chars[Math.floor(Math.random() * chars.length)]).join('');
+                        if (iteration >= finalName.length) {
+                            clearInterval(revealTimeout);
+                            nameElement.textContent = finalName;
+                            subtitleElement.style.transition = 'opacity 1s ease-in-out';
+                            subtitleElement.style.opacity = '1';
+                            typeSubtitle();
+                        }
+                        iteration += 1 / 3;
+                    }, 40);
+                }
+                function typeSubtitle() {
+                    let i = 0;
+                    const typingInterval = setInterval(() => {
+                        if (i < finalSubtitle.length) {
+                            subtitleElement.textContent += finalSubtitle.charAt(i);
+                            i++;
+                        } else {
+                            clearInterval(typingInterval);
+                            homeButtons.style.transition = 'opacity 1s ease-in-out';
+                            homeButtons.style.opacity = '1';
+                        }
+                    }, 50);
+                }
+                setTimeout(revealName, 500);
+            }
+
+            const navLinks = document.querySelectorAll('.nav-link');
+            const pageSections = document.querySelectorAll('.page-section');
+            const mobileMenu = document.getElementById('mobile-menu');
+            const mobileMenuButton = document.getElementById('mobile-menu-button');
+
+            function showPage(targetId) {
+                pageSections.forEach(section => {
+                    section.style.display = 'none';
+                });
+
+                const activePage = document.getElementById(targetId);
+                if (activePage) {
+                    activePage.style.display = 'flex';
+                    window.scrollTo(0, 0);
+
+                    const animatedItems = activePage.querySelectorAll('.animated-item');
+                    animatedItems.forEach(item => item.classList.remove('is-visible'));
+                    setTimeout(() => {
+                         animatedItems.forEach((item, index) => {
+                            setTimeout(() => {
+                                item.classList.add('is-visible');
+                            }, index * 100);
+                        });
+                    }, 100);
+
+                    if (targetId === 'skills') {
+                        document.querySelectorAll('.skill-item').forEach(skill => {
+                            const bar = skill.querySelector('.progress-bar');
+                            const percentageSpan = skill.querySelector('.progress-percentage');
+                            const targetWidth = bar.getAttribute('data-width');
+                            
+                            bar.style.width = '0';
+                            percentageSpan.innerText = '0%';
+                            percentageSpan.style.opacity = '0';
+
+                            setTimeout(() => {
+                                bar.style.width = targetWidth;
+                                percentageSpan.style.opacity = '1';
+                                let current = 0;
+                                const target = parseInt(targetWidth);
+                                const interval = setInterval(() => {
+                                    current++;
+                                    if (current >= target) {
+                                        clearInterval(interval);
+                                        current = target;
+                                    }
+                                    percentageSpan.innerText = `${current}%`;
+                                }, 2000 / target);
+                            }, 500);
+                        });
+                    }
+                }
+
+                document.querySelectorAll('.nav-link').forEach(link => {
+                    link.classList.toggle('active', link.getAttribute('href') === `#${targetId}`);
+                });
+
+                mobileMenu.classList.add('hidden');
+            }
+
+            navLinks.forEach(link => {
+                link.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    const targetId = link.getAttribute('href').substring(1);
+                    showPage(targetId);
+                });
+            });
+
+            mobileMenuButton.addEventListener('click', () => {
+                mobileMenu.classList.toggle('hidden');
+            });
+
+            showPage('home');
+        });
+    </script>
+</body>
+</html>
