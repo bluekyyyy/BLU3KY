@@ -2,12 +2,15 @@
 <html lang="en" class="scroll-smooth">
 
 <head>
+    <!-- ============== METADATA AND STYLESHEETS ============== -->
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Arjun.B - Cybersecurity Portfolio</title>
     <link rel="icon" type="image/png" href="/assets/blueky.png">
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700;900&family=Roboto+Mono:wght@400;700&display=swap" rel="stylesheet">
+    
+    <!-- ============== CUSTOM CSS STYLES ============== -->
     <style>
         body {
             font-family: 'Inter', sans-serif;
@@ -55,17 +58,14 @@
             background-color: #ffffff; 
         }
 
-        /* Mobile Menu Transition */
         #mobile-menu {
             transition: transform 0.3s ease-in-out;
         }
 
-        /* This class defines our "pages". They are hidden by default and shown by JavaScript */
         .page-section {
              min-height: 100vh;
-             padding-top: 80px; /* Reduced Header offset */
+             padding-top: 80px; 
              padding-bottom: 80px;
-             /* Use flex to center content within the "page" */
              display: flex;
              align-items: center;
              justify-content: center;
@@ -78,16 +78,20 @@
 
 <body class="overflow-x-hidden">
 
-    <!-- WebGL Background Canvas -->
+    <!-- ============== WEBGL BACKGROUND CANVAS ============== -->
+    <!-- This canvas is used by JavaScript to render the animated background effect. -->
     <canvas id="webgl-canvas"></canvas>
 
-    <!-- Header & Navigation -->
+    <!-- ============== HEADER & NAVIGATION ============== -->
     <header id="header" class="glass-effect fixed top-0 left-0 right-0 z-50 border-b border-white/10">
         <div class="container mx-auto px-6 py-3">
             <div class="flex items-center justify-between">
+                <!-- Site Logo / Name -->
                 <a href="#home" data-target="home" class="nav-link text-lg font-bold tracking-wider text-white">
                     <span class="text-gray-500">&lt;</span>ARJUN.B<span class="text-gray-500">/&gt;</span>
                 </a>
+                
+                <!-- Desktop Navigation Links -->
                 <nav class="hidden md:flex items-center space-x-6 text-sm">
                     <a href="#home" data-target="home" class="nav-link text-gray-300 hover:text-white">Home</a>
                     <a href="#about" data-target="about" class="nav-link text-gray-300 hover:text-white">About</a>
@@ -98,6 +102,8 @@
                     <a href="#certificates" data-target="certificates" class="nav-link text-gray-300 hover:text-white">Certificates</a>
                     <a href="#contact" data-target="contact" class="nav-link text-gray-300 hover:text-white">Contact</a>
                 </nav>
+                
+                <!-- Mobile Menu Button (Hamburger) -->
                 <div class="md:hidden">
                     <button id="hamburger-btn" class="text-white focus:outline-none">
                         <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
@@ -107,7 +113,8 @@
                 </div>
             </div>
         </div>
-        <!-- Mobile Menu -->
+        
+        <!-- Mobile Menu (Hidden by default) -->
         <div id="mobile-menu" class="md:hidden glass-effect absolute top-full right-0 w-full max-w-xs transform translate-x-full border-t border-l border-b border-white/10 rounded-l-lg">
              <div class="flex flex-col p-4 space-y-4">
                 <a href="#home" data-target="home" class="nav-link text-gray-300 hover:text-white text-center">Home</a>
@@ -123,7 +130,7 @@
     </header>
 
     <main>
-        <!-- Home/Hero Page -->
+        <!-- ============== HOME / HERO PAGE ============== -->
         <section data-page="home" class="page-section text-center relative">
             <div class="z-10 px-4">
                 <h1 class="text-4xl md:text-5xl lg:text-6xl font-black text-white uppercase tracking-wider leading-tight">
@@ -148,7 +155,7 @@
             </div>
         </section>
 
-        <!-- About Page -->
+        <!-- ============== ABOUT PAGE ============== -->
         <section data-page="about" class="page-section hidden">
             <div class="container mx-auto px-6">
                 <h2 class="text-3xl md:text-4xl font-bold text-center mb-12">
@@ -182,8 +189,8 @@
             </div>
         </section>
 
-        <!-- Team Page -->
-        <section data-page="team" class="page-section hidden bg-black/50">
+        <!-- ============== TEAM PAGE ============== -->
+        <section data-page="team" class="page-section hidden">
             <div class="container mx-auto px-6">
                 <h2 class="text-3xl md:text-4xl font-bold text-center mb-12">
                     <span class="text-gray-500">02.</span> Team 👾
@@ -195,6 +202,8 @@
                     
                     <h4 class="text-lg font-bold text-white mb-6">Team: Binary Misfits</h4>
                     <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 font-mono text-xs">
+                        
+                        <!-- Team Member Card -->
                         <div class="glass-effect border border-white/10 p-4 rounded-lg flex flex-col text-center items-center">
                             <img src="/assets/Arjun.jpg" alt="Arjun B" class="w-20 h-20 rounded-full mb-3 border-2 border-gray-600">
                             <p class="font-bold text-sm text-white">Arjun.B (BLU3KY)</p>
@@ -205,6 +214,8 @@
                                 <a href="https://github.com/bluekyyyy" target="_blank" title="GitHub" class="w-8 h-8 flex items-center justify-center glass-effect border border-white/20 rounded-full hover:bg-white/10 transition-all duration-300"><svg class="w-4 h-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"></path></svg></a>
                             </div>
                         </div>
+
+                        <!-- Team Member Card -->
                         <div class="glass-effect border border-white/10 p-4 rounded-lg flex flex-col text-center items-center">
                             <img src="/assets/jaswanth.png" alt="Elavarasan T" class="w-20 h-20 rounded-full mb-3 border-2 border-gray-600">
                             <p class="font-bold text-sm text-white">Elavarasan.T (HexPh4r04h)</p>
@@ -215,6 +226,8 @@
                                 <a href="https://github.com/Pharoah01" target="_blank" title="GitHub" class="w-8 h-8 flex items-center justify-center glass-effect border border-white/20 rounded-full hover:bg-white/10 transition-all duration-300"><svg class="w-4 h-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"></path></svg></a>
                             </div>
                         </div>
+
+                        <!-- Team Member Card -->
                         <div class="glass-effect border border-white/10 p-4 rounded-lg flex flex-col text-center items-center">
                            <img src="/assets/luna.JPG" alt="Nithila R" class="w-20 h-20 rounded-full mb-3 border-2 border-gray-600 object-cover">
                             <p class="font-bold text-sm text-white">Nithila.R (Luna)</p>
@@ -225,63 +238,16 @@
                                 <a href="https://github.com/Nithila0411" target="_blank" title="GitHub" class="w-8 h-8 flex items-center justify-center glass-effect border border-white/20 rounded-full hover:bg-white/10 transition-all duration-300"><svg class="w-4 h-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"></path></svg></a>
                             </div>
                         </div>
-                        <div class="glass-effect border border-white/10 p-4 rounded-lg flex flex-col text-center items-center">
-                            <img src="/assets/goushal.jpeg" alt="Goushal K" class="w-20 h-20 rounded-full mb-3 border-2 border-gray-600 object-cover">
-                            <p class="font-bold text-sm text-white">Goushal.K (JellyBean)</p>
-                            <span class="block text-gray-400 mb-3">DFIR, Android, Stego</span>
-                             <div class="mt-auto flex justify-center space-x-2 pt-2">
-                                <a href="#" title="Website" class="w-8 h-8 flex items-center justify-center glass-effect border border-white/20 rounded-full hover:bg-white/10 transition-all duration-300"><svg class="w-4 h-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.72"></path><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.72-1.72"></path></svg></a>
-                                <a href="https://www.linkedin.com/in/goushal-k-590941279/" target="_blank" title="LinkedIn" class="w-8 h-8 flex items-center justify-center glass-effect border border-white/20 rounded-full hover:bg-white/10 transition-all duration-300"><svg class="w-4 h-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"></path><rect x="2" y="9" width="4" height="12"></rect><circle cx="4" cy="4" r="2"></circle></svg></a>
-                                <a href="https://github.com/goushalk/goushalk" target="_blank" title="GitHub" class="w-8 h-8 flex items-center justify-center glass-effect border border-white/20 rounded-full hover:bg-white/10 transition-all duration-300"><svg class="w-4 h-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"></path></svg></a>
-                            </div>
-                        </div>
-                        <div class="glass-effect border border-white/10 p-4 rounded-lg flex flex-col text-center items-center">
-                           <img src="/assets/aswath.png" alt="Aswath A V" class="w-20 h-20 rounded-full mb-3 border-2 border-gray-600 object-cover">
-                            <p class="font-bold text-sm text-white">Aswath.A V (45HH)</p>
-                            <span class="block text-gray-400 mb-3">CTF, Crypto, Forensics</span>
-                             <div class="mt-auto flex justify-center space-x-2 pt-2">
-                                <a href="#" title="Website" class="w-8 h-8 flex items-center justify-center glass-effect border border-white/20 rounded-full hover:bg-white/10 transition-all duration-300"><svg class="w-4 h-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.72"></path><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.72-1.72"></path></svg></a>
-                                <a href="https://linkedin.com/in/a-v-aswath" target="_blank" title="LinkedIn" class="w-8 h-8 flex items-center justify-center glass-effect border border-white/20 rounded-full hover:bg-white/10 transition-all duration-300"><svg class="w-4 h-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"></path><rect x="2" y="9" width="4" height="12"></rect><circle cx="4" cy="4" r="2"></circle></svg></a>
-                                <a href="https://github.com/Ashwath-001" target="_blank" title="GitHub" class="w-8 h-8 flex items-center justify-center glass-effect border border-white/20 rounded-full hover:bg-white/10 transition-all duration-300"><svg class="w-4 h-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"></path></svg></a>
-                            </div>
-                        </div>
-                        <div class="glass-effect border border-white/10 p-4 rounded-lg flex flex-col text-center items-center">
-                            <img src="/assets/harish.jpg" alt="Harish K P" class="w-20 h-20 rounded-full mb-3 border-2 border-gray-600 object-cover">
-                            <p class="font-bold text-sm text-white">Harish.K P (H4r15h)</p>
-                            <span class="block text-gray-400 mb-3">CTF, Android & IoT Pentesting</span>
-                             <div class="mt-auto flex justify-center space-x-2 pt-2">
-                                <a href="#" title="Website" class="w-8 h-8 flex items-center justify-center glass-effect border border-white/20 rounded-full hover:bg-white/10 transition-all duration-300"><svg class="w-4 h-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.72"></path><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.72-1.72"></path></svg></a>
-                                <a href="https://www.linkedin.com/in/harish-k-p-12847b291/" target="_blank" title="LinkedIn" class="w-8 h-8 flex items-center justify-center glass-effect border border-white/20 rounded-full hover:bg-white/10 transition-all duration-300"><svg class="w-4 h-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"></path><rect x="2" y="9" width="4" height="12"></rect><circle cx="4" cy="4" r="2"></circle></svg></a>
-                                <a href="https://github.com/harish-pushan" target="_blank" title="GitHub" class="w-8 h-8 flex items-center justify-center glass-effect border border-white/20 rounded-full hover:bg-white/10 transition-all duration-300"><svg class="w-4 h-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"></path></svg></a>
-                            </div>
-                        </div>
-                        <div class="glass-effect border border-white/10 p-4 rounded-lg flex flex-col text-center items-center">
-                            <img src="https://placehold.co/200x200/0a0a2a/00ffff?text=MEMBER" alt="Lakshitha S" class="w-20 h-20 rounded-full mb-3 border-2 border-gray-600 object-cover">
-                            <p class="font-bold text-sm text-white">Lakshitha.S (L4K1)</p>
-                            <span class="block text-gray-400 mb-3">CTF, Forensics, Crypto, Stego</span>
-                             <div class="mt-auto flex justify-center space-x-2 pt-2">
-                                <a href="#" title="Website" class="w-8 h-8 flex items-center justify-center glass-effect border border-white/20 rounded-full hover:bg-white/10 transition-all duration-300"><svg class="w-4 h-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.72"></path><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.72-1.72"></path></svg></a>
-                                <a href="https://www.linkedin.com/in/lakshitha-s-59979b338/" target="_blank" title="LinkedIn" class="w-8 h-8 flex items-center justify-center glass-effect border border-white/20 rounded-full hover:bg-white/10 transition-all duration-300"><svg class="w-4 h-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"></path><rect x="2" y="9" width="4" height="12"></rect><circle cx="4" cy="4" r="2"></circle></svg></a>
-                                <a href="https://github.com/Lakshitha-01" target="_blank" title="GitHub" class="w-8 h-8 flex items-center justify-center glass-effect border border-white/20 rounded-full hover:bg-white/10 transition-all duration-300"><svg class="w-4 h-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"></path></svg></a>
-                            </div>
-                        </div>
-                        <div class="glass-effect border border-white/10 p-4 rounded-lg flex flex-col text-center items-center">
-                            <img src="https://placehold.co/200x200/0a0a2a/00ffff?text=MEMBER" alt="Padmesh S" class="w-20 h-20 rounded-full mb-3 border-2 border-gray-600 object-cover">
-                            <p class="font-bold text-sm text-white">Padmesh.S (DUDU)</p>
-                            <span class="block text-gray-400 mb-3">CTF, Full Stack Development</span>
-                             <div class="mt-auto flex justify-center space-x-2 pt-2">
-                                <a href="#" title="Website" class="w-8 h-8 flex items-center justify-center glass-effect border border-white/20 rounded-full hover:bg-white/10 transition-all duration-300"><svg class="w-4 h-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.72"></path><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.72-1.72"></path></svg></a>
-                                <a href="https://www.linkedin.com/in/padmesh-s-1524a8283/" target="_blank" title="LinkedIn" class="w-8 h-8 flex items-center justify-center glass-effect border border-white/20 rounded-full hover:bg-white/10 transition-all duration-300"><svg class="w-4 h-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"></path><rect x="2" y="9" width="4" height="12"></rect><circle cx="4" cy="4" r="2"></circle></svg></a>
-                                <a href="https://github.com/PadmeshSs" target="_blank" title="GitHub" class="w-8 h-8 flex items-center justify-center glass-effect border border-white/20 rounded-full hover:bg-white/10 transition-all duration-300"><svg class="w-4 h-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"></path></svg></a>
-                            </div>
-                        </div>
+
+                        <!-- Add other team members following the same card structure -->
+
                     </div>
                 </div>
             </div>
         </section>
 
 
-        <!-- Skills Page -->
+        <!-- ============== SKILLS PAGE ============== -->
         <section data-page="skills" class="page-section hidden">
             <div class="container mx-auto px-6">
                 <h2 class="text-3xl md:text-4xl font-bold text-center mb-12">
@@ -289,7 +255,7 @@
                 </h2>
                 <div class="max-w-5xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-8 text-left">
                     
-                    <!-- Card 1: Cybersecurity Domains -->
+                    <!-- Skills Card: Cybersecurity Domains -->
                     <div class="glass-effect border border-white/10 rounded-lg p-6 h-full">
                         <h3 class="text-xl font-bold text-white mb-4">Cybersecurity Domains</h3>
                         <p class="text-gray-400 mb-4 font-mono text-sm">Core areas of my cybersecurity focus and expertise.</p>
@@ -305,7 +271,7 @@
                         </ul>
                     </div>
 
-                    <!-- Card 2: Tools & Technologies -->
+                    <!-- Skills Card: Tools & Technologies -->
                     <div class="glass-effect border border-white/10 rounded-lg p-6 h-full">
                         <h3 class="text-xl font-bold text-white mb-4">Tools & Technologies</h3>
                          <p class="text-gray-400 mb-4 font-mono text-sm">The arsenal of tools I use for analysis and exploitation.</p>
@@ -325,7 +291,7 @@
                         </div>
                     </div>
 
-                    <!-- Card 3: Programming & Languages -->
+                    <!-- Skills Card: Programming & Languages -->
                     <div class="glass-effect border border-white/10 rounded-lg p-6 h-full">
                         <h3 class="text-xl font-bold text-white mb-4">Programming & Languages</h3>
                          <p class="text-gray-400 mb-4 font-mono text-sm">Languages I'm proficient in, both for scripting and communication.</p>
@@ -342,7 +308,7 @@
                         </div>
                     </div>
                     
-                    <!-- Card 4: Soft Skills -->
+                    <!-- Skills Card: Soft Skills -->
                     <div class="glass-effect border border-white/10 rounded-lg p-6 h-full">
                         <h3 class="text-xl font-bold text-white mb-4">Soft Skills</h3>
                         <p class="text-gray-400 mb-4 font-mono text-sm">Essential personal attributes for effective teamwork and problem-solving.</p>
@@ -361,14 +327,15 @@
             </div>
         </section>
 
-        <!-- Projects Page -->
-        <section data-page="projects" class="page-section hidden bg-black/50">
+        <!-- ============== PROJECTS PAGE ============== -->
+        <section data-page="projects" class="page-section hidden">
             <div class="container mx-auto px-6">
                  <h2 class="text-3xl md:text-4xl font-bold text-center mb-12">
                     <span class="text-gray-500">04.</span> Projects 📂
                 </h2>
                 <div class="grid md:grid-cols-2 gap-8 max-w-5xl mx-auto">
-                    <!-- Project Card 1 -->
+                    
+                    <!-- Project Card -->
                     <div class="glass-effect border border-white/10 rounded-lg overflow-hidden flex flex-col group">
                         <div class="p-6 flex-grow">
                             <h3 class="text-xl font-bold text-white mb-2">Malware Scanner</h3>
@@ -382,62 +349,22 @@
                            <a href="https://github.com/your-username/project-1" target="_blank" class="inline-block glass-effect border border-white/20 hover:bg-white/10 text-white font-bold py-2 px-4 rounded-lg transition-all duration-300 text-sm">View Project</a>
                         </div>
                     </div>
-                    <!-- Project Card 2 -->
-                    <div class="glass-effect border border-white/10 rounded-lg overflow-hidden flex flex-col group">
-                         <div class="p-6 flex-grow">
-                            <h3 class="text-xl font-bold text-white mb-2">AuraCrypt</h3>
-                            <p class="text-gray-400 mb-4 text-sm">A secure file sender application that encrypts files using the AES (Advanced Encryption Standard) algorithm before transmission, ensuring data confidentiality.</p>
-                            <div class="flex flex-wrap gap-2 mb-4 font-mono text-xs">
-                                <span class="bg-gray-800/50 px-2 py-1 rounded">Python</span>
-                                <span class="bg-gray-800/50 px-2 py-1 rounded">Cryptography</span>
-                                <span class="bg-gray-800/50 px-2 py-1 rounded">AES</span>
-                            </div>
-                        </div>
-                        <div class="p-6 pt-0 mt-auto">
-                            <a href="https://github.com/your-username/project-1" target="_blank" class="inline-block glass-effect border border-white/20 hover:bg-white/10 text-white font-bold py-2 px-4 rounded-lg transition-all duration-300 text-sm">View Project</a>
-                        </div>
-                    </div>
-                    <!-- Project Card 3 -->
-                    <div class="glass-effect border border-white/10 rounded-lg overflow-hidden flex flex-col group">
-                        <div class="p-6 flex-grow">
-                           <h3 class="text-xl font-bold text-white mb-2">Phishing Campaign Simulator</h3>
-                           <p class="text-gray-400 mb-4 text-sm">A platform to create and launch simulated phishing campaigns to train employees and test organizational security awareness against social engineering attacks.</p>
-                            <div class="flex flex-wrap gap-2 mb-4 font-mono text-xs">
-                               <span class="bg-gray-800/50 px-2 py-1 rounded">Python</span>
-                               <span class="bg-gray-800/50 px-2 py-1 rounded">Flask</span>
-                               <span class="bg-gray-800/50 px-2 py-1 rounded">SMTP</span>
-                           </div>
-                       </div>
-                       <div class="p-6 pt-0 mt-auto">
-                          <a href="https://github.com/your-username/project-1" target="_blank" class="inline-block glass-effect border border-white/20 hover:bg-white/10 text-white font-bold py-2 px-4 rounded-lg transition-all duration-300 text-sm">View Project</a>
-                       </div>
-                   </div>
-                   <!-- Project Card 4 -->
-                   <div class="glass-effect border border-white/10 rounded-lg overflow-hidden flex flex-col group">
-                        <div class="p-6 flex-grow">
-                           <h3 class="text-xl font-bold text-white mb-2">Network Intrusion Detection System</h3>
-                           <p class="text-gray-400 mb-4 text-sm">A Python-based NIDS that captures and analyzes network traffic in real-time using Scapy, detecting suspicious activities like port scanning and DoS attacks.</p>
-                           <div class="flex flex-wrap gap-2 mb-4 font-mono text-xs">
-                               <span class="bg-gray-800/50 px-2 py-1 rounded">Python</span>
-                               <span class="bg-gray-800/50 px-2 py-1 rounded">Scapy</span>
-                               <span class="bg-gray-800/50 px-2 py-1 rounded">Socket</span>
-                           </div>
-                       </div>
-                       <div class="p-6 pt-0 mt-auto">
-                           <a href="https://github.com/your-username/project-1" target="_blank" class="inline-block glass-effect border border-white/20 hover:bg-white/10 text-white font-bold py-2 px-4 rounded-lg transition-all duration-300 text-sm">View Project</a>
-                       </div>
-                   </div>
+                    
+                    <!-- Add other project cards here -->
+
                 </div>
             </div>
         </section>
         
-        <!-- Achievements Page -->
+        <!-- ============== ACHIEVEMENTS PAGE ============== -->
         <section data-page="achievements" class="page-section hidden">
              <div class="container mx-auto px-6">
                  <h2 class="text-3xl md:text-4xl font-bold text-center mb-12">
                     <span class="text-gray-500">05.</span> Achievements & CTF Wins 🏆
                 </h2>
                 <div class="max-w-4xl mx-auto space-y-8">
+
+                    <!-- Achievement Item -->
                     <div class="glass-effect border border-white/10 rounded-lg p-6 flex flex-col sm:flex-row justify-between items-center gap-4">
                         <div>
                             <h3 class="text-lg font-bold text-gray-300">1st Place - WARGAMES CTF</h3>
@@ -445,6 +372,8 @@
                         </div>
                         <a href="https://www.linkedin.com/posts/arjun-balasubramanian_ctf-cybersecurity-owaspsathyabama-activity-7311840125066354688-bE22?utm_source=share&utm_medium=member_desktop&rcm=ACoAAE0T4moBEaDyeg9UPYMfFANieEum2c-msL0" target="_blank" class="glass-effect border border-white/20 hover:bg-white/10 text-white font-bold py-2 px-4 rounded-lg transition-all duration-300 whitespace-nowrap text-sm">View Proof</a>
                     </div>
+                    
+                    <!-- Achievement Item -->
                      <div class="glass-effect border border-white/10 rounded-lg p-6 flex flex-col sm:flex-row justify-between items-center gap-4">
                          <div>
                             <h3 class="text-lg font-bold text-gray-300">2nd Place - HackOps CTF</h3>
@@ -452,6 +381,8 @@
                         </div>
                         <a href="https://www.linkedin.com/posts/arjun-balasubramanian_wrapped-up-hackops-ctf-with-a-2nd-place-finish-activity-7308531533378654208-gQ47?utm_source=share&utm_medium=member_desktop&rcm=ACoAAE0T4moBEaDyeg9UPYMfFANieEum2c-msL0" target="_blank" class="glass-effect border border-white/20 hover:bg-white/10 text-white font-bold py-2 px-4 rounded-lg transition-all duration-300 whitespace-nowrap text-sm">View Proof</a>
                     </div>
+
+                    <!-- Achievement Item -->
                      <div class="glass-effect border border-white/10 rounded-lg p-6 flex flex-col sm:flex-row justify-between items-center gap-4">
                          <div>
                             <h3 class="text-lg font-bold text-gray-300">Winners - COSMOS CTF</h3>
@@ -463,14 +394,15 @@
             </div>
         </section>
 
-        <!-- Certificates Page -->
-        <section data-page="certificates" class="page-section hidden bg-black/50">
+        <!-- ============== CERTIFICATES PAGE ============== -->
+        <section data-page="certificates" class="page-section hidden">
             <div class="container mx-auto px-6">
                  <h2 class="text-3xl md:text-4xl font-bold text-center mb-12">
                     <span class="text-gray-500">06.</span> Certificates 📜
                 </h2>
                 <div class="grid md:grid-cols-2 gap-8 max-w-4xl mx-auto">
-                    <!-- Certificate Card 1 -->
+                    
+                    <!-- Certificate Card -->
                     <div class="glass-effect border border-white/10 rounded-lg overflow-hidden flex flex-col group text-center">
                         <div class="p-4">
                             <img src="/assets/certificate1.png" alt="Google Cybersecurity Certificate" class="w-full h-auto rounded-md mb-4 border border-gray-700">
@@ -483,50 +415,14 @@
                            </a>
                         </div>
                     </div>
-                    <!-- Certificate Card 2 -->
-                    <div class="glass-effect border border-white/10 rounded-lg overflow-hidden flex flex-col group text-center">
-                        <div class="p-4">
-                            <img src="https://placehold.co/600x400/1a1a1a/ffffff?text=TryHackMe+Jr+Pentester" alt="TryHackMe Jr Penetration Tester Certificate" class="w-full h-auto rounded-md mb-4 border border-gray-700">
-                            <h3 class="text-base font-bold text-white mb-2">TryHackMe - Jr Penetration Tester</h3>
-                        </div>
-                        <div class="p-4 pt-0 mt-auto">
-                           <a href="#" class="inline-flex items-center justify-center gap-2 glass-effect border border-white/20 hover:bg-white/10 text-white font-bold py-2 px-4 rounded-lg transition-all duration-300 text-sm">
-                               <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
-                               Download
-                           </a>
-                        </div>
-                    </div>
-                    <!-- Certificate Card 3 -->
-                    <div class="glass-effect border border-white/10 rounded-lg overflow-hidden flex flex-col group text-center">
-                        <div class="p-4">
-                            <img src="https://placehold.co/600x400/1a1a1a/ffffff?text=OSCP+(In+Progress)" alt="OSCP Certificate In Progress" class="w-full h-auto rounded-md mb-4 border border-gray-700">
-                            <h3 class="text-base font-bold text-white mb-2">OSCP (In Progress)</h3>
-                        </div>
-                        <div class="p-4 pt-0 mt-auto">
-                           <a href="#" class="inline-flex items-center justify-center gap-2 glass-effect border border-white/20 text-white font-bold py-2 px-4 rounded-lg cursor-not-allowed opacity-50 text-sm">
-                               <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
-                               Download
-                           </a>
-                        </div>
-                    </div>
-                     <!-- Certificate Card 4 -->
-                    <div class="glass-effect border border-white/10 rounded-lg overflow-hidden flex flex-col group text-center">
-                        <div class="p-4">
-                            <img src="https://placehold.co/600x400/1a1a1a/ffffff?text=CEH+(In+Progress)" alt="CEH Certificate In Progress" class="w-full h-auto rounded-md mb-4 border border-gray-700">
-                            <h3 class="text-base font-bold text-white mb-2">CEH (In Progress)</h3>
-                        </div>
-                        <div class="p-4 pt-0 mt-auto">
-                           <a href="#" class="inline-flex items-center justify-center gap-2 glass-effect border border-white/20 text-white font-bold py-2 px-4 rounded-lg cursor-not-allowed opacity-50 text-sm">
-                               <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
-                               Download
-                           </a>
-                        </div>
-                    </div>
+
+                    <!-- Add other certificate cards here -->
+                    
                 </div>
             </div>
         </section>
 
-        <!-- Contact Page -->
+        <!-- ============== CONTACT PAGE ============== -->
         <section data-page="contact" class="page-section hidden">
             <div class="container mx-auto px-6 max-w-2xl text-center">
                  <h2 class="text-3xl md:text-4xl font-bold text-center mb-4">
@@ -562,8 +458,8 @@
         </section>
     </main>
 
-    <!-- Footer -->
-    <footer class="bg-black/50 py-8">
+    <!-- ============== FOOTER ============== -->
+    <footer class="py-8">
         <div class="container mx-auto px-6 text-center text-gray-400">
             <div class="flex justify-center space-x-6 mb-4">
                 <a href="https://github.com/bluekyyyy" target="_blank" class="hover:text-white transition-colors" title="GitHub">
@@ -580,45 +476,57 @@
         </div>
     </footer>
 
+    <!-- ============== JAVASCRIPT LOGIC ============== -->
     <script>
         document.addEventListener('DOMContentLoaded', () => {
 
-            // --- Single Page Application (SPA) Navigation ---
+            // --- Single Page Application (SPA) Navigation Logic ---
+            // This code handles showing and hiding the different <section> tags to simulate multiple pages.
             const pageSections = document.querySelectorAll('.page-section');
             const allNavLinks = document.querySelectorAll('.nav-link');
             const mobileMenu = document.getElementById('mobile-menu');
 
             function showPage(targetId) {
+                // Hide all page sections first
                 pageSections.forEach(section => section.classList.add('hidden'));
+                
+                // Show the target page section
                 const targetSection = document.querySelector(`.page-section[data-page="${targetId}"]`);
                 if (targetSection) targetSection.classList.remove('hidden');
 
+                // Update the 'active' state on navigation links for styling
                 allNavLinks.forEach(link => {
                     link.classList.remove('active');
                     if (link.dataset.target === targetId) link.classList.add('active');
                 });
                 
+                // Scroll to the top of the page on navigation
                 window.scrollTo(0, 0); 
             }
 
+            // Add click listeners to all navigation links
             allNavLinks.forEach(link => {
                 link.addEventListener('click', (e) => {
                     e.preventDefault();
                     const targetId = link.dataset.target;
                     if(targetId) {
                         showPage(targetId);
+                        // Hide mobile menu after a link is clicked
                         mobileMenu.classList.add('translate-x-full');
                     }
                 });
             });
 
+            // Show the home page by default when the site loads
             showPage('home');
 
+            // Add click listener for the mobile hamburger button
             document.getElementById('hamburger-btn').addEventListener('click', () => {
                 mobileMenu.classList.toggle('translate-x-full');
             });
 
-            // --- WebGL Background ---
+            // --- WebGL Background Animation Logic ---
+            // This code initializes and renders the animated background on the <canvas> element.
             const canvas = document.getElementById('webgl-canvas');
             const gl = canvas.getContext('webgl', { antialias: true, alpha: true });
 
@@ -708,4 +616,5 @@
 </body>
 
 </html>
+
 
