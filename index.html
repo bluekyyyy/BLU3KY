@@ -6,8 +6,13 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Arjun.B - Cybersecurity Portfolio</title>
     <link rel="icon" type="image/png" href="/assets/blueky.png">
+    
     <script src="https://cdn.tailwindcss.com"></script>
+    
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700;900&family=Roboto+Mono:wght@400;700&display=swap" rel="stylesheet">
+    
+    <script src="https://unpkg.com/@phosphor-icons/web"></script>
+
     <style>
         /* ============== BASE STYLES ============== */
         body {
@@ -24,6 +29,7 @@
             background: rgba(255, 255, 255, 0.05);
             backdrop-filter: blur(10px);
             -webkit-backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
         }
         
         #webgl-canvas {
@@ -36,34 +42,11 @@
             opacity: 1;
         }
         
-        .nav-link {
-            position: relative;
-            transition: color 0.3s;
-        }
-        .nav-link::after {
-            content: '';
-            position: absolute;
-            width: 0;
-            height: 2px;
-            bottom: -4px;
-            left: 50%;
-            transform: translateX(-50%);
-            background-color: #888888;
-            transition: width 0.3s;
-        }
-        .nav-link:hover::after, .nav-link.active::after {
-            width: 100%;
-            background-color: #ffffff; 
-        }
-
-        #mobile-menu {
-            transition: transform 0.3s ease-in-out;
-        }
-
+        /* Adjusted padding to account for Top Navbar */
         .page-section {
              min-height: 100vh;
-             padding-top: 80px;
-             padding-bottom: 80px;
+             padding-top: 100px; /* Increased top padding */
+             padding-bottom: 40px;
              display: flex;
              align-items: center;
              justify-content: center;
@@ -72,36 +55,107 @@
             width: 100%;
         }
 
+        /* ============== DYNAMIC TOP DOCK STYLES ============== */
+        .navbar-dock {
+            position: fixed;
+            top: 1.5rem; /* Moved to Top */
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            align-items: center;
+            gap: 0.25rem; /* Reduced gap */
+            padding: 0.5rem 0.75rem; /* Reduced padding (Smaller) */
+            border-radius: 9999px;
+            z-index: 50;
+            transition: all 0.3s ease;
+            box-shadow: 0 5px 20px -5px rgba(0,0,0,0.5);
+            
+            /* Glass effect specific to nav */
+            background: rgba(0, 0, 0, 0.4); 
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+
+            max-width: 95vw;
+            overflow-x: auto;
+            scrollbar-width: none;
+        }
+        .navbar-dock::-webkit-scrollbar { display: none; }
+
+        .nav-item {
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-width: 3rem; /* Smaller width */
+            height: 3rem; /* Smaller height */
+            border-radius: 50%;
+            color: #9ca3af;
+            transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+            background: transparent;
+            border: none;
+            cursor: pointer;
+        }
+
+        .nav-item i {
+            font-size: 1.5rem; /* Smaller icons */
+        }
+
+        .nav-item:hover {
+            color: #ffffff;
+            background: rgba(255, 255, 255, 0.1);
+            transform: translateY(2px); /* Slight movement down */
+        }
+
+        /* ACTIVE STATE - WHITE GLOW */
+        .nav-item.active {
+            color: #ffffff;
+            background: rgba(255, 255, 255, 0.2);
+            box-shadow: 0 0 15px rgba(255, 255, 255, 0.5); /* White Glow */
+            transform: scale(1.05);
+        }
+
+        /* Tooltip for Top Dock (Appears BELOW) */
+        .nav-tooltip {
+            position: absolute;
+            bottom: -35px; /* Moved below */
+            left: 50%;
+            transform: translateX(-50%) scale(0.8);
+            background: rgba(0, 0, 0, 0.9);
+            color: white;
+            padding: 3px 8px;
+            border-radius: 4px;
+            font-size: 0.7rem;
+            opacity: 0;
+            pointer-events: none;
+            transition: all 0.2s ease;
+            white-space: nowrap;
+            border: 1px solid rgba(255,255,255,0.2);
+            font-family: 'Inter', sans-serif;
+            font-weight: 500;
+        }
+
+        .nav-item:hover .nav-tooltip {
+            opacity: 1;
+            transform: translateX(-50%) scale(1);
+            bottom: -40px;
+        }
+
         /* ============== ANIMATION STYLES ============== */
         @keyframes fadeInUp {
-            from {
-                opacity: 0;
-                transform: translateY(20px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
         }
 
-        @keyframes fadeIn {
-            from { opacity: 0; }
-            to { opacity: 1; }
-        }
-
-        /* Utility class to hide elements before animation */
         .animate-on-scroll {
             opacity: 0;
             transition: opacity 0.6s ease-out, transform 0.6s ease-out;
         }
 
-        /* Class to apply to trigger the animation */
         .animate-on-scroll.is-visible {
             opacity: 1;
             transform: none;
         }
 
-        /* Specific initial states for different animation types */
         .animate-on-scroll.fade-in-up {
             transform: translateY(20px);
         }
@@ -110,54 +164,48 @@
 
 <body class="overflow-x-hidden">
 
-    <!-- WebGL Background Canvas -->
     <canvas id="webgl-canvas"></canvas>
 
-    <!-- ============== HEADER & NAVIGATION ============== -->
-    <header id="header" class="glass-effect fixed top-0 left-0 right-0 z-50 border-b border-white/10">
-        <div class="container mx-auto px-6 py-3">
-            <div class="flex items-center justify-between">
-                <a href="#home" data-target="home" class="nav-link text-lg font-bold tracking-wider text-white">
-                    <span class="text-gray-500">&lt;</span>ARJUN.B<span class="text-gray-500">/&gt;</span>
-                </a>
-                <nav class="hidden md:flex items-center space-x-6 text-sm">
-                    <a href="#home" data-target="home" class="nav-link text-gray-300 hover:text-white">Home</a>
-                    <a href="#about" data-target="about" class="nav-link text-gray-300 hover:text-white">About</a>
-                    <a href="#team" data-target="team" class="nav-link text-gray-300 hover:text-white">Team</a>
-                    <a href="#skills" data-target="skills" class="nav-link text-gray-300 hover:text-white">Skills</a>
-                    <a href="#projects" data-target="projects" class="nav-link text-gray-300 hover:text-white">Projects</a>
-                    <a href="#experience" data-target="experience" class="nav-link text-gray-300 hover:text-white">Experience</a>
-                    <a href="#achievements" data-target="achievements" class="nav-link text-gray-300 hover:text-white">Achievements</a>
-                    <a href="#certificates" data-target="certificates" class="nav-link text-gray-300 hover:text-white">Certificates</a>
-                    <a href="#contact" data-target="contact" class="nav-link text-gray-300 hover:text-white">Contact</a>
-                </nav>
-                <div class="md:hidden">
-                    <button id="hamburger-btn" class="text-white focus:outline-none">
-                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
-                        </svg>
-                    </button>
-                </div>
-            </div>
-        </div>
-        <!-- Mobile Menu -->
-        <div id="mobile-menu" class="md:hidden glass-effect absolute top-full right-0 w-full max-w-xs transform translate-x-full border-t border-l border-b border-white/10 rounded-l-lg">
-             <div class="flex flex-col p-4 space-y-4">
-                <a href="#home" data-target="home" class="nav-link text-gray-300 hover:text-white text-center">Home</a>
-                <a href="#about" data-target="about" class="nav-link text-gray-300 hover:text-white text-center">About</a>
-                <a href="#team" data-target="team" class="nav-link text-gray-300 hover:text-white text-center">Team</a>
-                <a href="#skills" data-target="skills" class="nav-link text-gray-300 hover:text-white text-center">Skills</a>
-                <a href="#projects" data-target="projects" class="nav-link text-gray-300 hover:text-white text-center">Projects</a>
-                <a href="#experience" data-target="experience" class="nav-link text-gray-300 hover:text-white text-center">Experience</a>
-                <a href="#achievements" data-target="achievements" class="nav-link text-gray-300 hover:text-white text-center">Achievements</a>
-                <a href="#certificates" data-target="certificates" class="nav-link text-gray-300 hover:text-white text-center">Certificates</a>
-                <a href="#contact" data-target="contact" class="nav-link text-gray-300 hover:text-white text-center">Contact</a>
-             </div>
-        </div>
-    </header>
+    <nav class="navbar-dock">
+        <button onclick="showPage('home')" class="nav-item active" data-target="home">
+            <i class="ph ph-house"></i>
+            <span class="nav-tooltip">Home</span>
+        </button>
+        <button onclick="showPage('about')" class="nav-item" data-target="about">
+            <i class="ph ph-user"></i>
+            <span class="nav-tooltip">About</span>
+        </button>
+        <button onclick="showPage('team')" class="nav-item" data-target="team">
+            <i class="ph ph-users"></i>
+            <span class="nav-tooltip">Team</span>
+        </button>
+        <button onclick="showPage('skills')" class="nav-item" data-target="skills">
+            <i class="ph ph-cpu"></i>
+            <span class="nav-tooltip">Skills</span>
+        </button>
+        <button onclick="showPage('projects')" class="nav-item" data-target="projects">
+            <i class="ph ph-code"></i>
+            <span class="nav-tooltip">Projects</span>
+        </button>
+        <button onclick="showPage('experience')" class="nav-item" data-target="experience">
+            <i class="ph ph-briefcase"></i>
+            <span class="nav-tooltip">Experience</span>
+        </button>
+        <button onclick="showPage('achievements')" class="nav-item" data-target="achievements">
+            <i class="ph ph-trophy"></i>
+            <span class="nav-tooltip">Wins</span>
+        </button>
+        <button onclick="showPage('certificates')" class="nav-item" data-target="certificates">
+            <i class="ph ph-scroll"></i>
+            <span class="nav-tooltip">Certs</span>
+        </button>
+        <button onclick="showPage('contact')" class="nav-item" data-target="contact">
+            <i class="ph ph-paper-plane-tilt"></i>
+            <span class="nav-tooltip">Contact</span>
+        </button>
+    </nav>
 
     <main>
-        <!-- ============== HOME/HERO PAGE ============== -->
         <section data-page="home" class="page-section text-center relative">
             <div class="z-10 px-4">
                 <h1 class="text-4xl md:text-5xl lg:text-6xl font-black text-white uppercase tracking-wider leading-tight animate-on-scroll fade-in-up" style="transition-delay: 100ms;">
@@ -167,9 +215,9 @@
                     &gt; Cybersecurity Enthusiast
                 </p>
                 <div class="mt-8 flex flex-col sm:flex-row items-center justify-center gap-4 animate-on-scroll fade-in-up" style="transition-delay: 300ms;">
-                    <a href="#projects" data-target="projects" class="nav-link w-full sm:w-auto glass-effect border border-white/20 hover:bg-white/10 text-white font-bold py-2 px-6 rounded-lg transition-all duration-300 transform hover:scale-105">
+                    <button onclick="showPage('projects')" class="nav-link w-full sm:w-auto glass-effect border border-white/20 hover:bg-white/10 text-white font-bold py-2 px-6 rounded-lg transition-all duration-300 transform hover:scale-105">
                         View My Work
-                    </a>
+                    </button>
                     <a href="https://www.linkedin.com/in/arjun-balasubramanian/" target="_blank" class="w-full sm:w-auto glass-effect border border-white/20 hover:bg-white/10 text-white font-bold py-2 px-6 rounded-lg transition-all duration-300 transform hover:scale-105 inline-flex items-center justify-center gap-2">
                         <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"></path><rect x="2" y="9" width="4" height="12"></rect><circle cx="4" cy="4" r="2"></circle></svg>
                         LinkedIn
@@ -182,7 +230,6 @@
             </div>
         </section>
 
-        <!-- ============== ABOUT PAGE ============== -->
         <section data-page="about" class="page-section hidden">
             <div class="container mx-auto px-6">
                 <h2 class="text-3xl md:text-4xl font-bold text-center mb-12 animate-on-scroll fade-in-up">
@@ -216,11 +263,10 @@
             </div>
         </section>
 
-        <!-- ============== TEAM PAGE ============== -->
         <section data-page="team" class="page-section hidden">
             <div class="container mx-auto px-6">
                 <h2 class="text-3xl md:text-4xl font-bold text-center mb-12 animate-on-scroll fade-in-up">
-                    <span class="text-gray-500">02.</span> Team 👾
+                    <span class="text-gray-500">02.</span> Team
                 </h2>
                 <div class="max-w-6xl mx-auto text-center">
                     <div class="animate-on-scroll fade-in-up" style="transition-delay: 100ms;">
@@ -231,7 +277,6 @@
                     </div>
                     <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 font-mono text-xs">
                         
-                        <!-- Team Member Card -->
                         <div class="glass-effect border border-white/10 p-4 rounded-lg flex flex-col text-center items-center animate-on-scroll fade-in-up">
                             <img src="/assets/Arjun.jpg" alt="Arjun B" class="w-20 h-20 rounded-full mb-3 border-2 border-gray-600">
                             <p class="font-bold text-sm text-white">Arjun.B (BLU3KY)</p>
@@ -243,7 +288,6 @@
                             </div>
                         </div>
 
-                        <!-- Team Member Card -->
                         <div class="glass-effect border border-white/10 p-4 rounded-lg flex flex-col text-center items-center animate-on-scroll fade-in-up">
                            <img src="/assets/luna.JPG" alt="Nithila R" class="w-20 h-20 rounded-full mb-3 border-2 border-gray-600 object-cover">
                             <p class="font-bold text-sm text-white">Nithila.R (Luna)</p>
@@ -255,7 +299,6 @@
                             </div>
                         </div>
 
-                        <!-- Team Member Card -->
                         <div class="glass-effect border border-white/10 p-4 rounded-lg flex flex-col text-center items-center animate-on-scroll fade-in-up">
                             <img src="/assets/goushal.jpeg" alt="Goushal K" class="w-20 h-20 rounded-full mb-3 border-2 border-gray-600 object-cover">
                             <p class="font-bold text-sm text-white">Goushal.K (JellyBean)</p>
@@ -267,7 +310,6 @@
                             </div>
                         </div>
                         
-                        <!-- Team Member Card -->
                         <div class="glass-effect border border-white/10 p-4 rounded-lg flex flex-col text-center items-center animate-on-scroll fade-in-up">
                            <img src="/assets/aswath.png" alt="Aswath A V" class="w-20 h-20 rounded-full mb-3 border-2 border-gray-600 object-cover">
                             <p class="font-bold text-sm text-white">Aswath.A V (45HH)</p>
@@ -279,7 +321,6 @@
                             </div>
                         </div>
 
-                        <!-- Team Member Card -->
                         <div class="glass-effect border border-white/10 p-4 rounded-lg flex flex-col text-center items-center animate-on-scroll fade-in-up">
                             <img src="/assets/harish.jpg" alt="Harish K P" class="w-20 h-20 rounded-full mb-3 border-2 border-gray-600 object-cover">
                             <p class="font-bold text-sm text-white">Harish.K P (H4r15h)</p>
@@ -291,7 +332,6 @@
                             </div>
                         </div>
 
-                        <!-- Team Member Card -->
                         <div class="glass-effect border border-white/10 p-4 rounded-lg flex flex-col text-center items-center animate-on-scroll fade-in-up">
                             <img src="https://placehold.co/200x200/0a0a2a/00ffff?text=MEMBER" alt="Lakshitha S" class="w-20 h-20 rounded-full mb-3 border-2 border-gray-600 object-cover">
                             <p class="font-bold text-sm text-white">Lakshitha.S (L4K1)</p>
@@ -303,7 +343,6 @@
                             </div>
                         </div>
 
-                        <!-- Team Member Card -->
                         <div class="glass-effect border border-white/10 p-4 rounded-lg flex flex-col text-center items-center animate-on-scroll fade-in-up">
                             <img src="https://placehold.co/200x200/0a0a2a/00ffff?text=MEMBER" alt="Padmesh S" class="w-20 h-20 rounded-full mb-3 border-2 border-gray-600 object-cover">
                             <p class="font-bold text-sm text-white">Padmesh.S (DUDU)</p>
@@ -315,7 +354,6 @@
                             </div>
                         </div>
 
-                        <!-- Team Member Card -->
                         <div class="glass-effect border border-white/10 p-4 rounded-lg flex flex-col text-center items-center animate-on-scroll fade-in-up">
                             <img src="https://placehold.co/200x200/0a0a2a/00ffff?text=MEMBER" alt="Elavarasan T" class="w-20 h-20 rounded-full mb-3 border-2 border-gray-600">
                             <p class="font-bold text-sm text-white">Elavarasan.T (HexPh4r04h)</p>
@@ -333,15 +371,13 @@
         </section>
 
 
-        <!-- ============== SKILLS PAGE ============== -->
         <section data-page="skills" class="page-section hidden">
             <div class="container mx-auto px-6">
                 <h2 class="text-3xl md:text-4xl font-bold text-center mb-12 animate-on-scroll fade-in-up">
-                    <span class="text-gray-500">03.</span> Skills & Proficiencies 🛠️
+                    <span class="text-gray-500">03.</span> Skills & Proficiencies
                 </h2>
                 <div class="max-w-5xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-8 text-left">
                     
-                    <!-- Card 1: Cybersecurity Domains -->
                     <div class="glass-effect border border-white/10 rounded-lg p-6 h-full animate-on-scroll fade-in-up">
                         <h3 class="text-xl font-bold text-white mb-4">Cybersecurity Domains</h3>
                         <p class="text-gray-400 mb-4 font-mono text-sm">Core areas of my cybersecurity focus and expertise.</p>
@@ -357,7 +393,6 @@
                         </ul>
                     </div>
 
-                    <!-- Card 2: Tools & Technologies -->
                     <div class="glass-effect border border-white/10 rounded-lg p-6 h-full animate-on-scroll fade-in-up">
                         <h3 class="text-xl font-bold text-white mb-4">Tools & Technologies</h3>
                          <p class="text-gray-400 mb-4 font-mono text-sm">The arsenal of tools I use for analysis and exploitation.</p>
@@ -377,7 +412,6 @@
                         </div>
                     </div>
 
-                    <!-- Card 3: Programming & Languages -->
                     <div class="glass-effect border border-white/10 rounded-lg p-6 h-full animate-on-scroll fade-in-up">
                         <h3 class="text-xl font-bold text-white mb-4">Programming & Languages</h3>
                          <p class="text-gray-400 mb-4 font-mono text-sm">Languages I'm proficient in, both for scripting and communication.</p>
@@ -394,7 +428,6 @@
                         </div>
                     </div>
                     
-                    <!-- Card 4: Soft Skills -->
                     <div class="glass-effect border border-white/10 rounded-lg p-6 h-full animate-on-scroll fade-in-up">
                         <h3 class="text-xl font-bold text-white mb-4">Soft Skills</h3>
                         <p class="text-gray-400 mb-4 font-mono text-sm">Essential personal attributes for effective teamwork and problem-solving.</p>
@@ -413,15 +446,13 @@
             </div>
         </section>
 
-        <!-- ============== PROJECTS PAGE ============== -->
         <section data-page="projects" class="page-section hidden">
             <div class="container mx-auto px-6">
                  <h2 class="text-3xl md:text-4xl font-bold text-center mb-12 animate-on-scroll fade-in-up">
-                    <span class="text-gray-500">04.</span> Projects 📂
+                    <span class="text-gray-500">04.</span> Projects
                 </h2>
                 <div class="grid md:grid-cols-2 gap-8 max-w-5xl mx-auto">
                     
-                    <!-- Project Card -->
                     <div class="glass-effect border border-white/10 rounded-lg overflow-hidden flex flex-col group animate-on-scroll fade-in-up">
                         <div class="p-6 flex-grow">
                             <h3 class="text-xl font-bold text-white mb-2">Malware Scanner</h3>
@@ -436,7 +467,6 @@
                         </div>
                     </div>
                     
-                    <!-- Project Card 2 -->
                     <div class="glass-effect border border-white/10 rounded-lg overflow-hidden flex flex-col group animate-on-scroll fade-in-up">
                          <div class="p-6 flex-grow">
                             <h3 class="text-xl font-bold text-white mb-2">AuraCrypt</h3>
@@ -451,7 +481,6 @@
                             <a href="https://github.com/bluekyyyy" target="_blank" class="inline-block glass-effect border border-white/20 hover:bg-white/10 text-white font-bold py-2 px-4 rounded-lg transition-all duration-300 text-sm">View Project</a>
                         </div>
                     </div>
-                    <!-- Project Card 3 -->
                     <div class="glass-effect border border-white/10 rounded-lg overflow-hidden flex flex-col group animate-on-scroll fade-in-up">
                         <div class="p-6 flex-grow">
                            <h3 class="text-xl font-bold text-white mb-2">Phishing Campaign Simulator</h3>
@@ -466,7 +495,6 @@
                           <a href="https://github.com/bluekyyyy" target="_blank" class="inline-block glass-effect border border-white/20 hover:bg-white/10 text-white font-bold py-2 px-4 rounded-lg transition-all duration-300 text-sm">View Project</a>
                        </div>
                    </div>
-                   <!-- Project Card 4 -->
                    <div class="glass-effect border border-white/10 rounded-lg overflow-hidden flex flex-col group animate-on-scroll fade-in-up">
                         <div class="p-6 flex-grow">
                            <h3 class="text-xl font-bold text-white mb-2">Network Intrusion Detection System</h3>
@@ -485,14 +513,12 @@
             </div>
         </section>
         
-        <!-- ============== EXPERIENCE PAGE ============== -->
         <section data-page="experience" class="page-section hidden">
             <div class="container mx-auto px-6">
                 <h2 class="text-3xl md:text-4xl font-bold text-center mb-12 animate-on-scroll fade-in-up">
-                    <span class="text-gray-500">05.</span> Experience 💼
+                    <span class="text-gray-500">05.</span> Experience
                 </h2>
                 <div class="max-w-3xl mx-auto space-y-8">
-                    <!-- Experience Item 1 -->
                     <div class="glass-effect border border-white/10 rounded-lg p-6 animate-on-scroll fade-in-up">
                         <h3 class="text-lg font-bold text-white">Cybersecurity Intern</h3>
                         <p class="font-mono text-gray-400 text-sm mb-3">SecureNet Solutions | Jun 2024 - Aug 2024</p>
@@ -502,7 +528,6 @@
                             <li>Contributed to incident response reports and documentation.</li>
                         </ul>
                     </div>
-                    <!-- Experience Item 2 -->
                     <div class="glass-effect border border-white/10 rounded-lg p-6 animate-on-scroll fade-in-up">
                         <h3 class="text-lg font-bold text-white">Capture The Flag (CTF) Team Lead</h3>
                         <p class="font-mono text-gray-400 text-sm mb-3">Binary Misfits | Jan 2024 - Present</p>
@@ -512,7 +537,6 @@
                             <li>Mentor junior members and develop weekly training materials and custom challenges.</li>
                         </ul>
                     </div>
-                    <!-- Experience Item 3 -->
                     <div class="glass-effect border border-white/10 rounded-lg p-6 animate-on-scroll fade-in-up">
                         <h3 class="text-lg font-bold text-white">Freelance Security Consultant</h3>
                         <p class="font-mono text-gray-400 text-sm mb-3">Self-Employed | 2023 - Present</p>
@@ -522,8 +546,7 @@
                             <li>Wrote custom Python and Bash scripts for automating security checks and log analysis.</li>
                         </ul>
                     </div>
-                     <!-- Experience Item 4 -->
-                    <div class="glass-effect border border-white/10 rounded-lg p-6 animate-on-scroll fade-in-up">
+                     <div class="glass-effect border border-white/10 rounded-lg p-6 animate-on-scroll fade-in-up">
                         <h3 class="text-lg font-bold text-white">IT Support Volunteer</h3>
                         <p class="font-mono text-gray-400 text-sm mb-3">Sathyabama University Tech Fest | Mar 2024</p>
                         <ul class="list-disc list-inside text-gray-300 text-sm space-y-2">
@@ -536,11 +559,10 @@
             </div>
         </section>
 
-        <!-- ============== ACHIEVEMENTS PAGE ============== -->
         <section data-page="achievements" class="page-section hidden">
              <div class="container mx-auto px-6">
                  <h2 class="text-3xl md:text-4xl font-bold text-center mb-12 animate-on-scroll fade-in-up">
-                    <span class="text-gray-500">06.</span> Achievements & CTF Wins 🏆
+                    <span class="text-gray-500">06.</span> Achievements & CTF Wins
                 </h2>
                 <div class="max-w-4xl mx-auto space-y-8">
                     <div class="glass-effect border border-white/10 rounded-lg p-6 flex flex-col sm:flex-row justify-between items-center gap-4 animate-on-scroll fade-in-up">
@@ -568,15 +590,13 @@
             </div>
         </section>
 
-        <!-- ============== CERTIFICATES PAGE ============== -->
         <section data-page="certificates" class="page-section hidden">
             <div class="container mx-auto px-6">
                  <h2 class="text-3xl md:text-4xl font-bold text-center mb-12 animate-on-scroll fade-in-up">
-                    <span class="text-gray-500">07.</span> Certificates 📜
+                    <span class="text-gray-500">07.</span> Certificates
                 </h2>
                 <div class="grid md:grid-cols-2 gap-8 max-w-4xl mx-auto">
                     
-                    <!-- Certificate Card -->
                     <div class="glass-effect border border-white/10 rounded-lg overflow-hidden flex flex-col group text-center animate-on-scroll fade-in-up">
                         <div class="p-4">
                             <img src="/assets/certificate1.png" alt="Google Cybersecurity Certificate" class="w-full h-auto rounded-md mb-4 border border-gray-700">
@@ -590,7 +610,6 @@
                         </div>
                     </div>
 
-                    <!-- Certificate Card 2 -->
                     <div class="glass-effect border border-white/10 rounded-lg overflow-hidden flex flex-col group text-center animate-on-scroll fade-in-up">
                         <div class="p-4">
                             <img src="https://placehold.co/600x400/1a1a1a/ffffff?text=TryHackMe+Jr+Pentester" alt="TryHackMe Jr Penetration Tester Certificate" class="w-full h-auto rounded-md mb-4 border border-gray-700">
@@ -603,7 +622,6 @@
                            </a>
                         </div>
                     </div>
-                    <!-- Certificate Card 3 -->
                     <div class="glass-effect border border-white/10 rounded-lg overflow-hidden flex flex-col group text-center animate-on-scroll fade-in-up">
                         <div class="p-4">
                             <img src="https://placehold.co/600x400/1a1a1a/ffffff?text=OSCP+(In+Progress)" alt="OSCP Certificate In Progress" class="w-full h-auto rounded-md mb-4 border border-gray-700">
@@ -616,8 +634,7 @@
                            </a>
                         </div>
                     </div>
-                     <!-- Certificate Card 4 -->
-                    <div class="glass-effect border border-white/10 rounded-lg overflow-hidden flex flex-col group text-center animate-on-scroll fade-in-up">
+                     <div class="glass-effect border border-white/10 rounded-lg overflow-hidden flex flex-col group text-center animate-on-scroll fade-in-up">
                         <div class="p-4">
                             <img src="https://placehold.co/600x400/1a1a1a/ffffff?text=CEH+(In+Progress)" alt="CEH Certificate In Progress" class="w-full h-auto rounded-md mb-4 border border-gray-700">
                             <h3 class="text-base font-bold text-white mb-2">CEH (In Progress)</h3>
@@ -633,7 +650,6 @@
             </div>
         </section>
 
-        <!-- ============== CONTACT PAGE ============== -->
         <section data-page="contact" class="page-section hidden">
             <div class="container mx-auto px-6 max-w-2xl text-center">
                  <h2 class="text-3xl md:text-4xl font-bold text-center mb-4 animate-on-scroll fade-in-up">
@@ -669,7 +685,6 @@
         </section>
     </main>
 
-    <!-- ============== FOOTER ============== -->
     <footer class="py-8">
         <div class="container mx-auto px-6 text-center text-gray-400">
             <div class="flex justify-center space-x-6 mb-4">
@@ -692,44 +707,38 @@
 
             // --- Single Page Application (SPA) Navigation ---
             const pageSections = document.querySelectorAll('.page-section');
-            const allNavLinks = document.querySelectorAll('.nav-link');
-            const mobileMenu = document.getElementById('mobile-menu');
+            const navItems = document.querySelectorAll('.nav-item');
 
-            function showPage(targetId) {
+            // Global function for onclick events
+            window.showPage = function(targetId) {
+                // Hide all sections
                 pageSections.forEach(section => section.classList.add('hidden'));
+                
+                // Show target section
                 const targetSection = document.querySelector(`.page-section[data-page="${targetId}"]`);
-                if (targetSection) targetSection.classList.remove('hidden');
+                if (targetSection) {
+                    targetSection.classList.remove('hidden');
+                    
+                    // Retrigger animations for that section
+                    const elementsToAnimate = targetSection.querySelectorAll('.animate-on-scroll');
+                    elementsToAnimate.forEach(el => {
+                        el.classList.remove('is-visible');
+                        void el.offsetWidth; // Trigger reflow
+                        el.classList.add('is-visible');
+                    });
+                }
 
-                allNavLinks.forEach(link => {
-                    link.classList.remove('active');
-                    if (link.dataset.target === targetId) link.classList.add('active');
+                // Update Dock Active State
+                navItems.forEach(item => {
+                    item.classList.remove('active');
+                    if (item.dataset.target === targetId) item.classList.add('active');
                 });
                 
                 window.scrollTo(0, 0); 
             }
 
-            allNavLinks.forEach(link => {
-                link.addEventListener('click', (e) => {
-                    e.preventDefault();
-                    const targetId = link.dataset.target;
-                    if(targetId) {
-                        showPage(targetId);
-                        mobileMenu.classList.add('translate-x-full');
-                    }
-                });
-            });
-
-            // Show home page initially and animate its content
+            // Show home page initially
             showPage('home');
-            document.querySelectorAll('[data-page="home"] .animate-on-scroll').forEach(el => {
-                el.classList.add('is-visible');
-            });
-
-
-            document.getElementById('hamburger-btn').addEventListener('click', () => {
-                mobileMenu.classList.toggle('translate-x-full');
-            });
-
 
             // --- Scroll Animation Logic ---
             const animatedElements = document.querySelectorAll('.animate-on-scroll');
@@ -737,19 +746,17 @@
             const observer = new IntersectionObserver((entries) => {
                 entries.forEach(entry => {
                     if (entry.isIntersecting) {
-                        // For staggered animations, apply delay based on index
-                        const delay = parseInt(entry.target.dataset.staggerIndex || 0) * 100; // 100ms delay
+                        const delay = parseInt(entry.target.dataset.staggerIndex || 0) * 100; 
                         setTimeout(() => {
-                           entry.target.classList.add('is-visible');
+                            entry.target.classList.add('is-visible');
                         }, delay);
                         observer.unobserve(entry.target);
                     }
                 });
             }, {
-                threshold: 0.1 // Trigger when 10% of the element is visible
+                threshold: 0.1 
             });
             
-            // Add stagger index to children of grid containers
             document.querySelectorAll('.grid').forEach(grid => {
                 const children = grid.querySelectorAll('.animate-on-scroll');
                 children.forEach((child, index) => {
@@ -855,4 +862,3 @@
 </body>
 
 </html>
-
