@@ -1,858 +1,801 @@
 <!DOCTYPE html>
-<html lang="en" class="scroll-smooth">
-
+<html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Arjun.B - Cybersecurity Portfolio</title>
-    <link rel="icon" type="image/png" href="/assets/blueky.png">
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700;900&family=Roboto+Mono:wght@400;700&display=swap" rel="stylesheet">
-    <style>
-        /* ============== BASE STYLES ============== */
-        body {
-            font-family: 'Inter', sans-serif;
-            background-color: #000000;
-            color: #e5e7eb;
-        }
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>BLU3KY — Cybersecurity Portfolio</title>
+<link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Syne:wght@400;700;800&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 
-        .font-mono {
-            font-family: 'Roboto Mono', monospace;
-        }
+:root{
+  --bg:#080808;
+  --surface:#121212;
+  --surface2:#1a1a1a;
+  --border:rgba(255,255,255,0.1);
+  --accent:#ffffff;
+  --muted:#444444;
+  --text:#e8e8e8;
+  --text2:#888888;
+  --mono:'Space Mono',monospace;
+  --sans:'Syne',sans-serif;
+}
 
-        .glass-effect {
-            background: rgba(255, 255, 255, 0.05);
-            backdrop-filter: blur(10px);
-            -webkit-backdrop-filter: blur(10px);
-        }
-        
-        #webgl-canvas {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100vh; 
-            z-index: -1;
-            opacity: 1;
-        }
-        
-        .nav-link {
-            position: relative;
-            transition: color 0.3s;
-        }
-        .nav-link::after {
-            content: '';
-            position: absolute;
-            width: 0;
-            height: 2px;
-            bottom: -4px;
-            left: 50%;
-            transform: translateX(-50%);
-            background-color: #888888;
-            transition: width 0.3s;
-        }
-        .nav-link:hover::after, .nav-link.active::after {
-            width: 100%;
-            background-color: #ffffff; 
-        }
+html { scroll-padding-top: 5rem; }
+section, #hero, .sec-wrap, [id] { scroll-margin-top: 5rem; }
+html{scroll-behavior:auto}
 
-        #mobile-menu {
-            transition: transform 0.3s ease-in-out;
-        }
+body{
+  font-family:var(--sans);
+  background:var(--bg);
+  color:var(--text);
+  overflow-x:hidden;
+  cursor:none;
+}
 
-        .page-section {
-             min-height: 100vh;
-             padding-top: 80px;
-             padding-bottom: 80px;
-             display: flex;
-             align-items: center;
-             justify-content: center;
-        }
-        .page-section > div {
-            width: 100%;
-        }
+::-webkit-scrollbar{width:3px}
+::-webkit-scrollbar-track{background:var(--bg)}
+::-webkit-scrollbar-thumb{background:var(--muted);border-radius:3px}
 
-        /* ============== ANIMATION STYLES ============== */
-        @keyframes fadeInUp {
-            from {
-                opacity: 0;
-                transform: translateY(20px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
+#cur,#cur-ring{position:fixed;pointer-events:none;border-radius:50%;z-index:9999;transform:translate(-50%,-50%)}
+#cur{width:8px;height:8px;background:#fff;mix-blend-mode:difference;transition:width .15s,height .15s}
+#cur-ring{width:32px;height:32px;border:1px solid rgba(255,255,255,.4);z-index:9998;transition:left .1s,top .1s,width .2s,height .2s}
 
-        @keyframes fadeIn {
-            from { opacity: 0; }
-            to { opacity: 1; }
-        }
+#bgc{position:fixed;inset:0;z-index:0;pointer-events:none}
 
-        /* Utility class to hide elements before animation */
-        .animate-on-scroll {
-            opacity: 0;
-            transition: opacity 0.6s ease-out, transform 0.6s ease-out;
-        }
+.nav-wrap{
+  position:fixed;
+  top:1rem;
+  left:50%;
+  transform:translateX(-50%);
+  z-index:200;
+  display:flex;
+  align-items:center;
+  gap:0;
+  padding:.35rem .5rem;
+  background:rgba(14,14,14,.97);
+  border:1px solid rgba(255,255,255,.18);
+  border-radius:9999px;
+  box-shadow:0 4px 30px rgba(0,0,0,.7),0 0 20px rgba(255,255,255,.04);
+  max-width:calc(100vw - 2rem);
+  white-space:nowrap;
+}
+.nav-logo{
+  font-family:var(--mono);
+  font-size:.78rem;
+  font-weight:700;
+  color:var(--accent);
+  text-decoration:none;
+  padding:.38rem .9rem;
+  border-radius:9999px;
+  letter-spacing:.06em;
+  flex-shrink:0;
+}
+.nav-logo span{color:var(--text2)}
+.nav-div{width:1px;height:14px;background:rgba(255,255,255,.1);flex-shrink:0;margin:0 .2rem}
+.nav-links{display:flex;align-items:center;list-style:none}
+.nav-links a{
+  font-family:var(--mono);
+  font-size:.6rem;
+  letter-spacing:.08em;
+  text-transform:uppercase;
+  color:var(--text2);
+  text-decoration:none;
+  padding:.38rem .72rem;
+  border-radius:9999px;
+  transition:color .15s,background .15s;
+  display:block;
+}
+.nav-links a:hover{color:var(--accent);background:rgba(255,255,255,.08)}
+.nav-links a.active{color:#000;background:#fff}
+.nav-ham{
+  display:none;
+  flex-direction:column;
+  gap:4px;
+  background:none;
+  border:none;
+  cursor:pointer;
+  padding:8px;
+  border-radius:50%;
+  flex-shrink:0;
+  margin-left:.2rem;
+}
+.nav-ham span{display:block;width:15px;height:1.5px;background:var(--accent);border-radius:2px;transition:transform .25s,opacity .25s}
+.nav-ham.open span:nth-child(1){transform:translateY(5.5px) rotate(45deg)}
+.nav-ham.open span:nth-child(2){opacity:0}
+.nav-ham.open span:nth-child(3){transform:translateY(-5.5px) rotate(-45deg)}
 
-        /* Class to apply to trigger the animation */
-        .animate-on-scroll.is-visible {
-            opacity: 1;
-            transform: none;
-        }
+.mob-menu{
+  display:none;
+  position:fixed;
+  top:4.2rem;
+  left:50%;
+  transform:translateX(-50%);
+  background:rgba(14,14,14,.99);
+  border:1px solid rgba(255,255,255,.14);
+  border-radius:14px;
+  padding:.5rem;
+  z-index:199;
+  min-width:185px;
+  box-shadow:0 12px 40px rgba(0,0,0,.7);
+}
+.mob-menu.open{display:block}
+.mob-menu a{
+  display:block;
+  font-family:var(--mono);
+  font-size:.68rem;
+  letter-spacing:.1em;
+  text-transform:uppercase;
+  color:var(--text2);
+  text-decoration:none;
+  padding:.6rem 1rem;
+  border-radius:8px;
+  transition:color .15s,background .15s;
+}
+.mob-menu a:hover{color:var(--accent);background:rgba(255,255,255,.06)}
 
-        /* Specific initial states for different animation types */
-        .animate-on-scroll.fade-in-up {
-            transform: translateY(20px);
-        }
-    </style>
+.page-content{position:relative;z-index:1}
+
+#hero{
+  min-height:100vh;
+  display:flex;
+  align-items:center;
+  padding:5rem 2.5rem 4rem;
+  position:relative;
+}
+#hero::after{
+  content:'';
+  position:absolute;
+  inset:0;
+  background:linear-gradient(135deg,rgba(8,8,8,.72) 0%,rgba(8,8,8,.35) 55%,rgba(8,8,8,.55) 100%);
+  pointer-events:none;
+  z-index:0;
+}
+#hero>*{position:relative;z-index:1}
+.hero-grid{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:4rem;
+  max-width:1160px;
+  margin:0 auto;
+  width:100%;
+  align-items:center;
+}
+.hero-tag{
+  font-family:var(--mono);
+  font-size:.68rem;
+  color:var(--accent);
+  letter-spacing:.2em;
+  text-transform:uppercase;
+  margin-bottom:1.5rem;
+  display:flex;
+  align-items:center;
+  gap:.75rem;
+}
+.hero-tag::before{content:'';width:2rem;height:1px;background:var(--accent)}
+h1{font-size:clamp(2.8rem,6.5vw,5.5rem);font-weight:800;line-height:.95;letter-spacing:-.02em;color:#fff;margin-bottom:.25rem}
+h1.al{color:var(--accent)}
+h1 .al{color:var(--accent);display:block}
+.hero-sub{font-family:var(--mono);font-size:clamp(.75rem,1.4vw,.92rem);color:var(--text2);margin:1.4rem 0 2.2rem;line-height:1.85}
+.hero-sub em{color:var(--accent);font-style:normal}
+.hero-btns{display:flex;gap:.85rem;flex-wrap:wrap}
+.btn-p{
+  font-family:var(--mono);font-size:.72rem;letter-spacing:.1em;text-transform:uppercase;
+  padding:.8rem 1.6rem;background:var(--accent);color:#000;text-decoration:none;
+  border:none;cursor:pointer;font-weight:700;transition:background .2s;
+  clip-path:polygon(0 0,calc(100% - 9px) 0,100% 9px,100% 100%,9px 100%,0 calc(100% - 9px));
+}
+.btn-p:hover{background:#fff}
+.btn-o{
+  font-family:var(--mono);font-size:.72rem;letter-spacing:.1em;text-transform:uppercase;
+  padding:.8rem 1.6rem;background:transparent;color:var(--accent);text-decoration:none;
+  border:1px solid var(--accent);cursor:pointer;font-weight:700;transition:background .2s;
+  clip-path:polygon(0 0,calc(100% - 9px) 0,100% 9px,100% 100%,9px 100%,0 calc(100% - 9px));
+}
+.btn-o:hover{background:rgba(255,255,255,.08)}
+
+.hero-visual{display:flex;align-items:center;justify-content:center;position:relative}
+.photo-ring{
+  position:relative;
+  width:280px;height:280px;
+  flex-shrink:0;
+}
+.photo-ring::before{
+  top:-2px;left:-2px;
+  border-top:2px solid #fff;
+  border-left:2px solid #fff;
+  animation:none;
+  background:none;
+  inset:unset;
+  border-radius:0;
+}
+.photo-ring::after{
+  bottom:-2px;right:-2px;
+  border-bottom:2px solid #fff;
+  border-right:2px solid #fff;
+  background:none;
+  inset:unset;
+  border-radius:0;
+}
+@keyframes breathe{0%,100%{box-shadow:0 0 0 1px rgba(255,255,255,.12)}50%{box-shadow:0 0 0 1px rgba(255,255,255,.35),0 0 24px rgba(255,255,255,.06)}}
+.photo-inner{
+  position:absolute;
+  inset:0;
+  overflow:hidden;
+  z-index:2;
+  background:var(--surface);
+  border:1px solid rgba(255,255,255,.15);
+  animation:breathe 4s ease-in-out infinite;
+}
+.photo-inner img{width:100%;height:100%;object-fit:cover;display:block}
+.photo-inner .ini{
+  width:100%;height:100%;
+  display:flex;align-items:center;justify-content:center;
+  font-family:var(--mono);font-size:3.5rem;color:#fff;font-weight:700;
+}
+.photo-corners{position:absolute;inset:-2px;z-index:3;pointer-events:none}
+.photo-corners::before,.photo-corners::after{
+  content:'';position:absolute;width:20px;height:20px;
+}
+.photo-corners::before{top:0;right:0;border-top:2px solid #fff;border-right:2px solid #fff}
+.photo-corners::after{bottom:0;left:0;border-bottom:2px solid #fff;border-left:2px solid #fff}
+
+.sec-wrap{
+  background:rgba(8,8,8,.78);
+  border-top:1px solid rgba(255,255,255,.06);
+}
+section{padding:5.5rem 2.5rem;max-width:1160px;margin:0 auto}
+.sec-label{
+  font-family:var(--mono);font-size:.62rem;color:var(--accent);
+  letter-spacing:.25em;text-transform:uppercase;margin-bottom:.6rem;
+  display:flex;align-items:center;gap:.6rem;
+}
+.sec-label::before{content:'//';color:var(--muted)}
+h2{font-size:clamp(1.7rem,3.8vw,2.6rem);font-weight:800;color:#fff;letter-spacing:-.02em;margin-bottom:2.75rem}
+
+.about-grid{display:grid;grid-template-columns:1fr 1.6fr;gap:3.5rem;align-items:start}
+.acard{background:var(--surface);border:1px solid var(--border);padding:1.75rem}
+.acard h3{font-family:var(--mono);font-size:.65rem;letter-spacing:.15em;text-transform:uppercase;color:var(--text2);margin-bottom:.9rem;padding-bottom:.7rem;border-bottom:1px solid var(--border)}
+.arow{display:flex;justify-content:space-between;padding:.45rem 0;border-bottom:1px solid rgba(255,255,255,.05);font-size:.8rem}
+.arow .lbl{font-family:var(--mono);color:var(--text2);font-size:.65rem}
+.arow .val{color:var(--text)}
+.about-txt p{color:var(--text2);line-height:1.85;font-size:.92rem;margin-bottom:1.1rem}
+.about-txt p strong{color:var(--accent);font-weight:700}
+.soc-links{display:flex;gap:.65rem;margin-top:1.4rem;flex-wrap:wrap}
+.soc-a{font-family:var(--mono);font-size:.65rem;letter-spacing:.1em;text-transform:uppercase;padding:.45rem .9rem;border:1px solid var(--border);color:var(--text2);text-decoration:none;transition:all .2s}
+.soc-a:hover{border-color:var(--accent);color:var(--accent)}
+
+.skills-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:1.25rem}
+.sk-card{background:var(--surface);border:1px solid var(--border);padding:1.6rem;position:relative;transition:border-color .3s}
+.sk-card::before{content:'';position:absolute;top:0;left:0;width:100%;height:2px;background:linear-gradient(90deg,#fff,transparent);opacity:0;transition:opacity .3s}
+.sk-card:hover{border-color:rgba(255,255,255,.28)}.sk-card:hover::before{opacity:1}
+.sk-card h3{font-size:.88rem;font-weight:700;color:#fff;margin-bottom:.2rem}
+.sk-sub{font-family:var(--mono);font-size:.62rem;color:var(--text2);margin-bottom:1.1rem}
+.tags{display:flex;flex-wrap:wrap;gap:.45rem}
+.tag{font-family:var(--mono);font-size:.62rem;padding:.28rem .65rem;background:var(--surface2);border:1px solid rgba(255,255,255,.1);color:var(--text2)}
+.tag.hi{background:#1e1e1e;color:#fff;border-color:rgba(255,255,255,.3)}
+
+.proj-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(290px,1fr));gap:1.25rem}
+.proj-card{background:var(--surface);border:1px solid var(--border);padding:1.6rem;display:flex;flex-direction:column;position:relative;overflow:hidden;transition:all .3s}
+.proj-card::after{content:'';position:absolute;top:0;right:0;width:0;height:0;border-style:solid;border-width:0 1.8rem 1.8rem 0;border-color:transparent #fff transparent transparent;opacity:0;transition:opacity .3s}
+.proj-card:hover{border-color:rgba(255,255,255,.3);transform:translateY(-3px)}.proj-card:hover::after{opacity:1}
+.proj-n{font-family:var(--mono);font-size:.6rem;color:var(--muted);margin-bottom:.85rem}
+.proj-card h3{font-size:1rem;font-weight:700;color:#fff;margin-bottom:.65rem}
+.proj-card p{font-size:.8rem;color:var(--text2);line-height:1.75;flex:1;margin-bottom:1.1rem}
+.stack{display:flex;flex-wrap:wrap;gap:.35rem;margin-bottom:1.1rem}
+.stag{font-family:var(--mono);font-size:.58rem;padding:.18rem .55rem;border:1px solid var(--border);color:var(--text2);background:var(--surface2)}
+.proj-lnk{font-family:var(--mono);font-size:.63rem;letter-spacing:.1em;text-transform:uppercase;color:var(--accent);text-decoration:none;display:inline-flex;align-items:center;gap:.35rem;transition:gap .2s}
+.proj-lnk:hover{gap:.65rem}
+
+.exp-list{display:flex;flex-direction:column;gap:1.25rem}
+.exp-item{display:grid;grid-template-columns:130px 1fr;gap:2rem;padding:1.75rem;background:var(--surface);border:1px solid var(--border);transition:border-color .3s}
+.exp-item:hover{border-color:rgba(255,255,255,.28)}
+.exp-date{font-family:var(--mono);font-size:.62rem;color:var(--text2);line-height:1.65;padding-top:.2rem;border-right:1px solid var(--border);padding-right:1.5rem}
+.exp-date .co{color:var(--accent);font-size:.67rem;font-weight:700;display:block;margin-bottom:.2rem}
+.exp-body h3{font-size:.95rem;font-weight:700;color:#fff;margin-bottom:.65rem}
+.exp-body ul{list-style:none;display:flex;flex-direction:column;gap:.35rem}
+.exp-body li{font-size:.8rem;color:var(--text2);display:flex;gap:.55rem;line-height:1.6}
+.exp-body li::before{content:'→';color:var(--accent);flex-shrink:0}
+
+.ach-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:1.25rem}
+.ach-card{background:var(--surface);border:1px solid var(--border);padding:1.75rem;display:flex;flex-direction:column;gap:.65rem;transition:border-color .3s}
+.ach-card:hover{border-color:rgba(255,255,255,.28)}
+.ach-card h3{font-size:.95rem;font-weight:700;color:#fff}
+.ach-card p{font-size:.78rem;color:var(--text2);line-height:1.7;flex:1}
+.ach-lnk{font-family:var(--mono);font-size:.62rem;letter-spacing:.1em;text-transform:uppercase;color:var(--accent);text-decoration:none;display:inline-flex;align-items:center;gap:.35rem;transition:gap .2s}
+.ach-lnk:hover{gap:.65rem}
+
+/* ── CERTS ── */
+.cert-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:1.25rem}
+.cert-card{background:var(--surface);border:1px solid var(--border);padding:1.6rem;transition:border-color .3s}
+.cert-card:hover{border-color:rgba(255,255,255,.28)}
+
+.cert-card h3{font-size:.88rem;font-weight:700;color:#fff;margin-bottom:.45rem}
+.badge{font-family:var(--mono);font-size:.58rem;padding:.18rem .5rem;display:inline-block;margin-bottom:.9rem}
+.badge.done{background:rgba(255,255,255,.08);color:#fff;border:1px solid rgba(255,255,255,.25)}
+.badge.wip{background:rgba(255,255,255,.05);color:#aaa;border:1px solid rgba(255,255,255,.15)}
+.cert-dl{
+  font-family:var(--mono);font-size:.62rem;color:var(--text2);
+  text-decoration:none;display:inline-flex;align-items:center;gap:.35rem;transition:color .2s;
+}
+.cert-dl:hover{color:var(--accent)}
+
+.team-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(185px,1fr));gap:1.1rem}
+.team-card{background:var(--surface);border:1px solid var(--border);padding:1.4rem 1rem;text-align:center;transition:border-color .3s}
+.team-card:hover{border-color:rgba(255,255,255,.2)}
+.t-ava{width:58px;height:58px;border-radius:50%;background:var(--surface2);border:2px solid var(--border);margin:0 auto .7rem;overflow:hidden;display:flex;align-items:center;justify-content:center;font-family:var(--mono);font-size:.95rem;color:var(--accent)}
+.t-ava img{width:100%;height:100%;object-fit:cover}
+.team-card h4{font-size:.82rem;font-weight:700;color:#fff;margin-bottom:.15rem}
+.t-handle{font-family:var(--mono);font-size:.6rem;color:var(--accent);display:block;margin-bottom:.4rem}
+.t-skills{font-family:var(--mono);font-size:.58rem;color:var(--text2);line-height:1.6}
+
+.contact-intro{color:var(--text2);line-height:1.85;font-size:.92rem;margin-bottom:2rem}
+.contact-intro strong{color:var(--accent)}
+.cf{display:flex;flex-direction:column;gap:.9rem;max-width:640px}
+.cf-row{display:grid;grid-template-columns:1fr 1fr;gap:.9rem}
+.fg{display:flex;flex-direction:column;gap:.35rem}
+.fg label{font-family:var(--mono);font-size:.62rem;letter-spacing:.15em;text-transform:uppercase;color:var(--text2)}
+.fg input,.fg textarea{background:var(--surface);border:1px solid var(--border);padding:.8rem .95rem;color:var(--text);font-family:var(--sans);font-size:.88rem;outline:none;transition:border-color .2s;resize:vertical}
+.fg input:focus,.fg textarea:focus{border-color:var(--accent)}
+.fg textarea{min-height:130px}
+
+footer{background:var(--bg);border-top:1px solid rgba(255,255,255,.08);padding:1.75rem 2.5rem;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:1rem;position:relative;z-index:1}
+.ft-l{font-family:var(--mono);font-size:.65rem;color:var(--muted)}
+.ft-l strong{color:var(--accent)}
+.ft-r{display:flex;gap:1.4rem}
+.ft-r a{font-family:var(--mono);font-size:.62rem;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);text-decoration:none;transition:color .2s}
+.ft-r a:hover{color:var(--accent)}
+
+.fu{opacity:0;transform:translateY(20px);transition:opacity .55s ease,transform .55s ease}
+.fu.vis{opacity:1;transform:none}
+
+@media(max-width:860px){
+  .nav-links{display:none}
+  .nav-ham{display:flex}
+  .hero-grid{grid-template-columns:1fr;text-align:center;gap:2.5rem}
+  .hero-tag,.hero-btns{justify-content:center}
+  .hero-visual{order:-1}
+  .photo-ring{width:200px;height:200px}
+  .about-grid{grid-template-columns:1fr;gap:2rem}
+  .exp-item{grid-template-columns:1fr;gap:.85rem}
+  .exp-date{border-right:none;border-bottom:1px solid var(--border);padding-right:0;padding-bottom:.65rem}
+  .cf-row{grid-template-columns:1fr}
+  section{padding:4rem 1.5rem}
+  #hero{padding:5rem 1.5rem 3rem}
+  footer{padding:1.5rem}
+}
+@media(max-width:480px){
+  h1{font-size:2.4rem}
+}
+</style>
 </head>
+<body>
 
-<body class="overflow-x-hidden">
+<canvas id="bgc"></canvas>
+<div id="cur"></div>
+<div id="cur-ring"></div>
 
-    <!-- WebGL Background Canvas -->
-    <canvas id="webgl-canvas"></canvas>
+<!-- FLOATING PILL NAV — now includes Certs -->
+<nav class="nav-wrap">
+  <a href="#hero" class="nav-logo">BLU3KY</a>
+  <div class="nav-div"></div>
+  <ul class="nav-links">
+    <li><a href="#about">About</a></li>
+    <li><a href="#skills">Skills</a></li>
+    <li><a href="#projects">Projects</a></li>
+    <li><a href="#experience">Exp</a></li>
+    <li><a href="#achievements">Wins</a></li>
+    <li><a href="#certs">Certs</a></li>
+    <li><a href="#team">Team</a></li>
+    <li><a href="#contact">Contact</a></li>
+  </ul>
+  <button class="nav-ham" id="ham" aria-label="Menu">
+    <span></span><span></span><span></span>
+  </button>
+</nav>
 
-    <!-- ============== HEADER & NAVIGATION ============== -->
-    <header id="header" class="glass-effect fixed top-0 left-0 right-0 z-50 border-b border-white/10">
-        <div class="container mx-auto px-6 py-3">
-            <div class="flex items-center justify-between">
-                <a href="#home" data-target="home" class="nav-link text-lg font-bold tracking-wider text-white">
-                    <span class="text-gray-500">&lt;</span>ARJUN.B<span class="text-gray-500">/&gt;</span>
-                </a>
-                <nav class="hidden md:flex items-center space-x-6 text-sm">
-                    <a href="#home" data-target="home" class="nav-link text-gray-300 hover:text-white">Home</a>
-                    <a href="#about" data-target="about" class="nav-link text-gray-300 hover:text-white">About</a>
-                    <a href="#team" data-target="team" class="nav-link text-gray-300 hover:text-white">Team</a>
-                    <a href="#skills" data-target="skills" class="nav-link text-gray-300 hover:text-white">Skills</a>
-                    <a href="#projects" data-target="projects" class="nav-link text-gray-300 hover:text-white">Projects</a>
-                    <a href="#experience" data-target="experience" class="nav-link text-gray-300 hover:text-white">Experience</a>
-                    <a href="#achievements" data-target="achievements" class="nav-link text-gray-300 hover:text-white">Achievements</a>
-                    <a href="#certificates" data-target="certificates" class="nav-link text-gray-300 hover:text-white">Certificates</a>
-                    <a href="#contact" data-target="contact" class="nav-link text-gray-300 hover:text-white">Contact</a>
-                </nav>
-                <div class="md:hidden">
-                    <button id="hamburger-btn" class="text-white focus:outline-none">
-                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
-                        </svg>
-                    </button>
-                </div>
-            </div>
+<!-- Mobile dropdown — also includes Certs -->
+<div class="mob-menu" id="mob">
+  <a href="#about" class="ml">About</a>
+  <a href="#skills" class="ml">Skills</a>
+  <a href="#projects" class="ml">Projects</a>
+  <a href="#experience" class="ml">Experience</a>
+  <a href="#achievements" class="ml">Wins</a>
+  <a href="#certs" class="ml">Certs</a>
+  <a href="#team" class="ml">Team</a>
+  <a href="#contact" class="ml">Contact</a>
+</div>
+
+<div class="page-content">
+
+  <div id="hero">
+    <div class="hero-grid">
+      <div>
+        <div class="hero-tag">Cybersecurity Student</div>
+        <h1 class="al">Arjun.B</h1>
+        <p class="hero-sub">
+          Final year @ <em>Sathyabama IST</em><br>
+          CTF Hunter · Ethical Hacker · Digital Forensics<br>
+          Team Member - <em>Binary Misfits</em><br>
+          Technical Lead - <em>OWASP SIST</em>
+        </p>
+        <div class="hero-btns">
+          <a href="#projects" class="btn-p">View Work →</a>
+          <a href="#contact" class="btn-o">Contact Me</a>
+          <a href="/assets/resume.pdf" download class="btn-o">Download CV</a>
         </div>
-        <!-- Mobile Menu -->
-        <div id="mobile-menu" class="md:hidden glass-effect absolute top-full right-0 w-full max-w-xs transform translate-x-full border-t border-l border-b border-white/10 rounded-l-lg">
-             <div class="flex flex-col p-4 space-y-4">
-                <a href="#home" data-target="home" class="nav-link text-gray-300 hover:text-white text-center">Home</a>
-                <a href="#about" data-target="about" class="nav-link text-gray-300 hover:text-white text-center">About</a>
-                <a href="#team" data-target="team" class="nav-link text-gray-300 hover:text-white text-center">Team</a>
-                <a href="#skills" data-target="skills" class="nav-link text-gray-300 hover:text-white text-center">Skills</a>
-                <a href="#projects" data-target="projects" class="nav-link text-gray-300 hover:text-white text-center">Projects</a>
-                <a href="#experience" data-target="experience" class="nav-link text-gray-300 hover:text-white text-center">Experience</a>
-                <a href="#achievements" data-target="achievements" class="nav-link text-gray-300 hover:text-white text-center">Achievements</a>
-                <a href="#certificates" data-target="certificates" class="nav-link text-gray-300 hover:text-white text-center">Certificates</a>
-                <a href="#contact" data-target="contact" class="nav-link text-gray-300 hover:text-white text-center">Contact</a>
-             </div>
+      </div>
+      <div class="hero-visual">
+        <div class="photo-ring">
+          <div class="photo-corners"></div>
+          <div class="photo-inner">
+            <img src="/assets/Arjun.jpg" alt="Arjun B" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
+            <div class="ini" style="display:none">AB</div>
+          </div>
         </div>
-    </header>
+      </div>
+    </div>
+  </div>
 
-    <main>
-        <!-- ============== HOME/HERO PAGE ============== -->
-        <section data-page="home" class="page-section text-center relative">
-            <div class="z-10 px-4">
-                <h1 class="text-4xl md:text-5xl lg:text-6xl font-black text-white uppercase tracking-wider leading-tight animate-on-scroll fade-in-up" style="transition-delay: 100ms;">
-                    Arjun.B
-                </h1>
-                <p class="font-mono text-base md:text-xl text-gray-400 mt-4 animate-on-scroll fade-in-up" style="transition-delay: 200ms;">
-                    &gt; Cybersecurity Enthusiast
-                </p>
-                <div class="mt-8 flex flex-col sm:flex-row items-center justify-center gap-4 animate-on-scroll fade-in-up" style="transition-delay: 300ms;">
-                    <a href="#projects" data-target="projects" class="nav-link w-full sm:w-auto glass-effect border border-white/20 hover:bg-white/10 text-white font-bold py-2 px-6 rounded-lg transition-all duration-300 transform hover:scale-105">
-                        View My Work
-                    </a>
-                    <a href="https://www.linkedin.com/in/arjun-balasubramanian/" target="_blank" class="w-full sm:w-auto glass-effect border border-white/20 hover:bg-white/10 text-white font-bold py-2 px-6 rounded-lg transition-all duration-300 transform hover:scale-105 inline-flex items-center justify-center gap-2">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"></path><rect x="2" y="9" width="4" height="12"></rect><circle cx="4" cy="4" r="2"></circle></svg>
-                        LinkedIn
-                    </a>
-                    <a href="/assets/resume.pdf" download="Arjun_B_Resume.pdf" class="w-full sm:w-auto glass-effect border border-white/20 hover:bg-white/10 text-white font-bold py-2 px-6 rounded-lg transition-all duration-300 transform hover:scale-105 inline-flex items-center justify-center gap-2">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
-                        Download CV
-                    </a>
-                </div>
-            </div>
-        </section>
+  <!-- ABOUT -->
+  <div class="sec-wrap" id="about">
+    <section>
+      <div class="sec-label">001</div>
+      <h2>About Me</h2>
+      <div class="about-grid">
+        <div class="acard fu">
+          <h3>Profile</h3>
+          <div class="arow"><span class="lbl">Handle</span><span class="val">BLU3KY</span></div>
+          <div class="arow"><span class="lbl">Institute</span><span class="val">Sathyabama IST</span></div>
+          <div class="arow"><span class="lbl">Year</span><span class="val">Final Year</span></div>
+          <div class="arow"><span class="lbl">Team</span><span class="val">Binary Misfits</span></div>
+          <div class="arow"><span class="lbl">Role</span><span class="val">CTF Player / OWASP technical team lead</span></div>
+          <div class="arow"><span class="lbl">Focus</span><span class="val">Web, Stego, OSINT, Crypto</span></div>
+          <div class="arow" style="border:none"><span class="lbl">Platforms</span><span class="val">TryHackMe · HTB</span></div>
+          <div class="soc-links">
+            <a href="https://github.com/bluekyyyy" target="_blank" class="soc-a">GitHub ↗</a>
+            <a href="https://www.linkedin.com/in/arjun-balasubramanian/" target="_blank" class="soc-a">LinkedIn ↗</a>
+            <a href="https://www.instagram.com/arjuuuun___" target="_blank" class="soc-a">Instagram ↗</a>
+          </div>
+        </div>
+        <div class="about-txt fu">
+          <p>I'm <strong>Arjun B</strong>, a passionate cybersecurity enthusiast focused on uncovering and mitigating digital threats. I actively sharpen my skills on <strong>TryHackMe</strong> and <strong>Hack The Box</strong>, specialising in web exploitation, steganography, OSINT, and cryptography.</p>
+          <p>As a Member of <strong>Team Binary Misfits</strong>, I help in organising and competing in national and international CTF competitions — earning event wins. I mentor junior members and create weekly training challenges.</p>
+          <p>Also, as the <strong>Tech Team Lead</strong> for the <strong>OWASP student chapter @ Sathyabama</strong>, I host Capture The Flag (CTF) events, create challenge questions, mentor junior members, and design weekly training challenges.</p>
+          <p>I believe cybersecurity is as much about <strong>curiosity and ethics</strong> as technical skill. My goal is to build systems that are not just powerful, but fundamentally secure.</p>
+        </div>
+      </div>
+    </section>
+  </div>
 
-        <!-- ============== ABOUT PAGE ============== -->
-        <section data-page="about" class="page-section hidden">
-            <div class="container mx-auto px-6">
-                <h2 class="text-3xl md:text-4xl font-bold text-center mb-12 animate-on-scroll fade-in-up">
-                    <span class="text-gray-500">01.</span> About Me
-                </h2>
-                <div class="max-w-4xl mx-auto flex flex-col md:flex-row items-center gap-10">
-                    <div class="md:w-2/3 space-y-4 text-gray-300 text-base animate-on-scroll fade-in-up" style="transition-delay: 100ms;">
-                        <p>I'm Arjun, a pre-final year student at Sathyabama Institute of Science and Technology and a passionate cybersecurity enthusiast focused on uncovering and mitigating digital threats.</p>
-                        <p>I actively sharpen my skills on platforms like TryHackMe and Hack The Box and am proficient in Linux environments, using a range of tools for ethical hacking and digital forensics.</p>
-                        <div class="mt-6 flex flex-wrap gap-4">
-                            <a href="https://www.linkedin.com/in/arjun-balasubramanian/" target="_blank" class="glass-effect border border-white/20 hover:bg-white/10 text-white font-bold py-2 px-4 rounded-lg inline-flex items-center gap-2 transition-all duration-300">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"></path><rect x="2" y="9" width="4" height="12"></rect><circle cx="4" cy="4" r="2"></circle></svg>
-                                LinkedIn
-                            </a>
-                             <a href="https://github.com/bluekyyyy" target="_blank" class="glass-effect border border-white/20 hover:bg-white/10 text-white font-bold py-2 px-4 rounded-lg inline-flex items-center gap-2 transition-all duration-300">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"></path></svg>
-                                GitHub
-                            </a>
-                            <a href="/assets/resume.pdf" download="Arjun_B_Resume.pdf" class="glass-effect border border-white/20 hover:bg-white/10 text-white font-bold py-2 px-4 rounded-lg inline-flex items-center gap-2 transition-all duration-300">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
-                                Download CV
-                            </a>
-                        </div>
-                    </div>
-                    <div class="md:w-1/3 flex justify-center animate-on-scroll fade-in-up" style="transition-delay: 200ms;">
-                        <div class="w-48 h-48 md:w-56 md:h-56 rounded-full border-4 border-gray-700 p-2">
-                             <img src="/assets/Arjun.jpg" alt="Arjun B Portrait" class="rounded-full w-full h-full object-cover">
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </section>
+  <!-- SKILLS -->
+  <div class="sec-wrap" id="skills">
+    <section>
+      <div class="sec-label">002</div>
+      <h2>Skills & Arsenal</h2>
+      <div class="skills-grid">
+        <div class="sk-card fu">
+          <h3>Cybersecurity Domains</h3><p class="sk-sub">Core areas of focus</p>
+          <div class="tags">
+            <span class="tag hi">Web App Pentesting</span><span class="tag hi">Network Security</span>
+            <span class="tag">DFIR</span><span class="tag">Cryptography</span><span class="tag">Steganography</span>
+            <span class="tag">Reverse Engineering</span><span class="tag">Malware Analysis</span>
+            <span class="tag">OSINT</span><span class="tag">Cloud Security</span><span class="tag">Threat Intel</span>
+          </div>
+        </div>
+        <div class="sk-card fu">
+          <h3>Tools & Technologies</h3><p class="sk-sub">The hacker's toolkit</p>
+          <div class="tags">
+            <span class="tag hi">Burp Suite</span><span class="tag hi">Wireshark</span>
+            <span class="tag">Nmap</span><span class="tag">Metasploit</span><span class="tag">Ghidra</span>
+            <span class="tag">Volatility</span><span class="tag">Autopsy</span><span class="tag">YARA</span>
+            <span class="tag">John the Ripper</span><span class="tag">GDB</span><span class="tag">Docker</span><span class="tag">Kali Linux</span>
+          </div>
+        </div>
+        <div class="sk-card fu">
+          <h3>Programming</h3><p class="sk-sub">Code & scripting</p>
+          <div class="tags"><span class="tag hi">Python</span><span class="tag hi">Bash</span><span class="tag">Scripting & Automation</span></div>
+          <div style="height:1px;background:var(--border);margin:.9rem 0"></div>
+          <h3>Languages</h3><p class="sk-sub" style="margin-top:.2rem">Spoken</p>
+          <div class="tags"><span class="tag">English</span><span class="tag">Tamil</span><span class="tag">Hindi</span></div>
+        </div>
+        <div class="sk-card fu">
+          <h3>Soft Skills</h3><p class="sk-sub">Human OS</p>
+          <div class="tags">
+            <span class="tag">Analytical Thinking</span><span class="tag">Team Leadership</span>
+            <span class="tag">Attention to Detail</span><span class="tag">Communication</span>
+            <span class="tag">Ethical Mindset</span><span class="tag">Quick Learner</span>
+            <span class="tag">Time Management</span><span class="tag">Technical Writing</span>
+          </div>
+        </div>
+      </div>
+    </section>
+  </div>
 
-        <!-- ============== TEAM PAGE ============== -->
-        <section data-page="team" class="page-section hidden">
-            <div class="container mx-auto px-6">
-                <h2 class="text-3xl md:text-4xl font-bold text-center mb-12 animate-on-scroll fade-in-up">
-                    <span class="text-gray-500">02.</span> Team 👾
-                </h2>
-                <div class="max-w-6xl mx-auto text-center">
-                    <div class="animate-on-scroll fade-in-up" style="transition-delay: 100ms;">
-                        <h3 class="text-xl font-bold text-white">CTF HUNTER</h3>
-                        <p class="font-mono text-base text-gray-400 mb-4">Team Binary Misfits | 2024 – Present</p>
-                        <p class="text-gray-300 max-w-3xl mx-auto mb-8 text-sm">Part of a CTF (Capture The Flag) focused cybersecurity team specializing in Exploit Development, Reverse Engineering, and Digital Forensics.</p>
-                        <h4 class="text-lg font-bold text-white mb-6">Team: Binary Misfits</h4>
-                    </div>
-                    <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 font-mono text-xs">
-                        
-                        <!-- Team Member Card -->
-                        <div class="glass-effect border border-white/10 p-4 rounded-lg flex flex-col text-center items-center animate-on-scroll fade-in-up">
-                            <img src="/assets/Arjun.jpg" alt="Arjun B" class="w-20 h-20 rounded-full mb-3 border-2 border-gray-600">
-                            <p class="font-bold text-sm text-white">Arjun.B (BLU3KY)</p>
-                            <span class="block text-gray-400 mb-3">CTF, Web, Stego, OSINT, Crypto</span>
-                            <div class="mt-auto flex justify-center space-x-2 pt-2">
-                                <a href="https://www.instagram.com/arjuuuun___" target="_blank" title="Instagram" class="w-8 h-8 flex items-center justify-center glass-effect border border-white/20 rounded-full hover:bg-white/10 transition-all duration-300"><svg class="w-4 h-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.72"></path><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.72-1.72"></path></svg></a>
-                                <a href="https://www.linkedin.com/in/arjun-balasubramanian/" target="_blank" title="LinkedIn" class="w-8 h-8 flex items-center justify-center glass-effect border border-white/20 rounded-full hover:bg-white/10 transition-all duration-300"><svg class="w-4 h-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"></path><rect x="2" y="9" width="4" height="12"></rect><circle cx="4" cy="4" r="2"></circle></svg></a>
-                                <a href="https://github.com/bluekyyyy" target="_blank" title="GitHub" class="w-8 h-8 flex items-center justify-center glass-effect border border-white/20 rounded-full hover:bg-white/10 transition-all duration-300"><svg class="w-4 h-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"></path></svg></a>
-                            </div>
-                        </div>
+  <!-- PROJECTS -->
+  <div class="sec-wrap" id="projects">
+    <section>
+      <div class="sec-label">003</div>
+      <h2>Projects</h2>
+      <div class="proj-grid">
+        <div class="proj-card fu">
+          <div class="proj-n">P-001</div>
+          <h3>PACKET ANALYZER AND CTF TOOL</h3>
+          <p>This is a two-in-one web tool for cybersecurity. It lets you analyze regular network traffic, but it also acts as an automatic detective for Capture The Flag (CTF) games — finding, piecing together, and decoding hidden data to reveal security flags instantly.</p>
+          <div class="stack"><span class="stag">Python</span><span class="stag">YARA</span></div>
+          <a href="https://github.com/bluekyyyy" target="_blank" class="proj-lnk">GitHub →</a>
+        </div>
+      </div>
+    </section>
+  </div>
 
-                        <!-- Team Member Card -->
-                        <div class="glass-effect border border-white/10 p-4 rounded-lg flex flex-col text-center items-center animate-on-scroll fade-in-up">
-                           <img src="/assets/luna.JPG" alt="Nithila R" class="w-20 h-20 rounded-full mb-3 border-2 border-gray-600 object-cover">
-                            <p class="font-bold text-sm text-white">Nithila.R (Luna)</p>
-                            <span class="block text-gray-400 mb-3">CTF, Web, Stego, Crypto</span>
-                            <div class="mt-auto flex justify-center space-x-2 pt-2">
-                                <a href="#" title="Website" class="w-8 h-8 flex items-center justify-center glass-effect border border-white/20 rounded-full hover:bg-white/10 transition-all duration-300"><svg class="w-4 h-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.72"></path><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.72-1.72"></path></svg></a>
-                                <a href="https://www.linkedin.com/in/nithila-rajeshkumar/" target="_blank" title="LinkedIn" class="w-8 h-8 flex items-center justify-center glass-effect border border-white/20 rounded-full hover:bg-white/10 transition-all duration-300"><svg class="w-4 h-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"></path><rect x="2" y="9" width="4" height="12"></rect><circle cx="4" cy="4" r="2"></circle></svg></a>
-                                <a href="https://github.com/Nithila0411" target="_blank" title="GitHub" class="w-8 h-8 flex items-center justify-center glass-effect border border-white/20 rounded-full hover:bg-white/10 transition-all duration-300"><svg class="w-4 h-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"></path></svg></a>
-                            </div>
-                        </div>
+  <!-- EXPERIENCE -->
+  <div class="sec-wrap" id="experience">
+    <section>
+      <div class="sec-label">004</div>
+      <h2>Experience</h2>
+      <div class="exp-list">
+        <div class="exp-item fu">
+          <div class="exp-date"><span class="co">BINARY MISFITS</span>Mar 2025<br>— Present</div>
+          <div class="exp-body">
+            <h3>CTF PLAYER</h3>
+            <ul>
+              <li>Help in organising and competing in national and international CTF competitions.</li>
+              <!-- <li>Monitored network traffic for suspicious activities using SIEM tools.</li>
+              <li>Contributed to incident response reports and documentation.</li> -->
+            </ul>
+          </div>
+        </div>
+        <div class="exp-item fu">
+          <div class="exp-date"><span class="co">OWASP Student chapter sathyabama</span>Sep 2025<br>— Present</div>
+          <div class="exp-body">
+            <h3>Technical Team Lead</h3>
+            <ul>
+              <li>Help in organising and college CTF competitions</li>
+              <li>Mentor junior members, and design weekly training challenges.</li>
+              <!-- <li>Mentor junior members and develop weekly training materials and custom challenges.</li> -->
+            </ul>
+          </div>
+        </div>
+      </div>
+    </section>
+  </div>
 
-                        <!-- Team Member Card -->
-                        <div class="glass-effect border border-white/10 p-4 rounded-lg flex flex-col text-center items-center animate-on-scroll fade-in-up">
-                            <img src="/assets/goushal.jpeg" alt="Goushal K" class="w-20 h-20 rounded-full mb-3 border-2 border-gray-600 object-cover">
-                            <p class="font-bold text-sm text-white">Goushal.K (JellyBean)</p>
-                            <span class="block text-gray-400 mb-3">DFIR, Android, Stego</span>
-                             <div class="mt-auto flex justify-center space-x-2 pt-2">
-                                <a href="#" title="Website" class="w-8 h-8 flex items-center justify-center glass-effect border border-white/20 rounded-full hover:bg-white/10 transition-all duration-300"><svg class="w-4 h-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.72"></path><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.72-1.72"></path></svg></a>
-                                <a href="https://www.linkedin.com/in/goushal-k-590941279/" target="_blank" title="LinkedIn" class="w-8 h-8 flex items-center justify-center glass-effect border border-white/20 rounded-full hover:bg-white/10 transition-all duration-300"><svg class="w-4 h-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"></path><rect x="2" y="9" width="4" height="12"></rect><circle cx="4" cy="4" r="2"></circle></svg></a>
-                                <a href="https://github.com/goushalk/goushalk" target="_blank" title="GitHub" class="w-8 h-8 flex items-center justify-center glass-effect border border-white/20 rounded-full hover:bg-white/10 transition-all duration-300"><svg class="w-4 h-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"></path></svg></a>
-                            </div>
-                        </div>
-                        
-                        <!-- Team Member Card -->
-                        <div class="glass-effect border border-white/10 p-4 rounded-lg flex flex-col text-center items-center animate-on-scroll fade-in-up">
-                           <img src="/assets/aswath.png" alt="Aswath A V" class="w-20 h-20 rounded-full mb-3 border-2 border-gray-600 object-cover">
-                            <p class="font-bold text-sm text-white">Aswath.A V (45HH)</p>
-                            <span class="block text-gray-400 mb-3">CTF, Crypto, Forensics</span>
-                             <div class="mt-auto flex justify-center space-x-2 pt-2">
-                                <a href="#" title="Website" class="w-8 h-8 flex items-center justify-center glass-effect border border-white/20 rounded-full hover:bg-white/10 transition-all duration-300"><svg class="w-4 h-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.72"></path><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.72-1.72"></path></svg></a>
-                                <a href="https://linkedin.com/in/a-v-aswath" target="_blank" title="LinkedIn" class="w-8 h-8 flex items-center justify-center glass-effect border border-white/20 rounded-full hover:bg-white/10 transition-all duration-300"><svg class="w-4 h-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"></path><rect x="2" y="9" width="4" height="12"></rect><circle cx="4" cy="4" r="2"></circle></svg></a>
-                                <a href="https://github.com/Ashwath-001" target="_blank" title="GitHub" class="w-8 h-8 flex items-center justify-center glass-effect border border-white/20 rounded-full hover:bg-white/10 transition-all duration-300"><svg class="w-4 h-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"></path></svg></a>
-                            </div>
-                        </div>
-
-                        <!-- Team Member Card -->
-                        <div class="glass-effect border border-white/10 p-4 rounded-lg flex flex-col text-center items-center animate-on-scroll fade-in-up">
-                            <img src="/assets/harish.jpg" alt="Harish K P" class="w-20 h-20 rounded-full mb-3 border-2 border-gray-600 object-cover">
-                            <p class="font-bold text-sm text-white">Harish.K P (H4r15h)</p>
-                            <span class="block text-gray-400 mb-3">CTF, Android & IoT Pentesting</span>
-                             <div class="mt-auto flex justify-center space-x-2 pt-2">
-                                <a href="#" title="Website" class="w-8 h-8 flex items-center justify-center glass-effect border border-white/20 rounded-full hover:bg-white/10 transition-all duration-300"><svg class="w-4 h-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.72"></path><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.72-1.72"></path></svg></a>
-                                <a href="https://www.linkedin.com/in/harish-k-p-12847b291/" target="_blank" title="LinkedIn" class="w-8 h-8 flex items-center justify-center glass-effect border border-white/20 rounded-full hover:bg-white/10 transition-all duration-300"><svg class="w-4 h-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"></path><rect x="2" y="9" width="4" height="12"></rect><circle cx="4" cy="4" r="2"></circle></svg></a>
-                                <a href="https://github.com/harish-pushan" target="_blank" title="GitHub" class="w-8 h-8 flex items-center justify-center glass-effect border border-white/20 rounded-full hover:bg-white/10 transition-all duration-300"><svg class="w-4 h-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"></path></svg></a>
-                            </div>
-                        </div>
-
-                        <!-- Team Member Card -->
-                        <div class="glass-effect border border-white/10 p-4 rounded-lg flex flex-col text-center items-center animate-on-scroll fade-in-up">
-                            <img src="https://placehold.co/200x200/0a0a2a/00ffff?text=MEMBER" alt="Lakshitha S" class="w-20 h-20 rounded-full mb-3 border-2 border-gray-600 object-cover">
-                            <p class="font-bold text-sm text-white">Lakshitha.S (L4K1)</p>
-                            <span class="block text-gray-400 mb-3">CTF, Forensics, Crypto, Stego</span>
-                             <div class="mt-auto flex justify-center space-x-2 pt-2">
-                                <a href="#" title="Website" class="w-8 h-8 flex items-center justify-center glass-effect border border-white/20 rounded-full hover:bg-white/10 transition-all duration-300"><svg class="w-4 h-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.72"></path><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.72-1.72"></path></svg></a>
-                                <a href="https://www.linkedin.com/in/lakshitha-s-59979b338/" target="_blank" title="LinkedIn" class="w-8 h-8 flex items-center justify-center glass-effect border border-white/20 rounded-full hover:bg-white/10 transition-all duration-300"><svg class="w-4 h-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"></path><rect x="2" y="9" width="4" height="12"></rect><circle cx="4" cy="4" r="2"></circle></svg></a>
-                                <a href="https://github.com/Lakshitha-01" target="_blank" title="GitHub" class="w-8 h-8 flex items-center justify-center glass-effect border border-white/20 rounded-full hover:bg-white/10 transition-all duration-300"><svg class="w-4 h-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"></path></svg></a>
-                            </div>
-                        </div>
-
-                        <!-- Team Member Card -->
-                        <div class="glass-effect border border-white/10 p-4 rounded-lg flex flex-col text-center items-center animate-on-scroll fade-in-up">
-                            <img src="https://placehold.co/200x200/0a0a2a/00ffff?text=MEMBER" alt="Padmesh S" class="w-20 h-20 rounded-full mb-3 border-2 border-gray-600 object-cover">
-                            <p class="font-bold text-sm text-white">Padmesh.S (DUDU)</p>
-                            <span class="block text-gray-400 mb-3">CTF, Full Stack Development</span>
-                             <div class="mt-auto flex justify-center space-x-2 pt-2">
-                                <a href="#" title="Website" class="w-8 h-8 flex items-center justify-center glass-effect border border-white/20 rounded-full hover:bg-white/10 transition-all duration-300"><svg class="w-4 h-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.72"></path><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.72-1.72"></path></svg></a>
-                                <a href="https://www.linkedin.com/in/padmesh-s-1524a8283/" target="_blank" title="LinkedIn" class="w-8 h-8 flex items-center justify-center glass-effect border border-white/20 rounded-full hover:bg-white/10 transition-all duration-300"><svg class="w-4 h-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"></path><rect x="2" y="9" width="4" height="12"></rect><circle cx="4" cy="4" r="2"></circle></svg></a>
-                                <a href="https://github.com/PadmeshSs" target="_blank" title="GitHub" class="w-8 h-8 flex items-center justify-center glass-effect border border-white/20 rounded-full hover:bg-white/10 transition-all duration-300"><svg class="w-4 h-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"></path></svg></a>
-                            </div>
-                        </div>
-
-                        <!-- Team Member Card -->
-                        <div class="glass-effect border border-white/10 p-4 rounded-lg flex flex-col text-center items-center animate-on-scroll fade-in-up">
-                            <img src="https://placehold.co/200x200/0a0a2a/00ffff?text=MEMBER" alt="Elavarasan T" class="w-20 h-20 rounded-full mb-3 border-2 border-gray-600">
-                            <p class="font-bold text-sm text-white">Elavarasan.T (HexPh4r04h)</p>
-                            <span class="block text-gray-400 mb-3">CTF, RE, Pwn, DFIR</span>
-                            <div class="mt-auto flex justify-center space-x-2 pt-2">
-                                <a href="#" title="Website" class="w-8 h-8 flex items-center justify-center glass-effect border border-white/20 rounded-full hover:bg-white/10 transition-all duration-300"><svg class="w-4 h-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.72"></path><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.72-1.72"></path></svg></a>
-                                <a href="https://www.linkedin.com/in/elavarasan-t-a5971b2a5/" target="_blank" title="LinkedIn" class="w-8 h-8 flex items-center justify-center glass-effect border border-white/20 rounded-full hover:bg-white/10 transition-all duration-300"><svg class="w-4 h-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"></path><rect x="2" y="9" width="4" height="12"></rect><circle cx="4" cy="4" r="2"></circle></svg></a>
-                                <a href="https://github.com/Pharoah01" target="_blank" title="GitHub" class="w-8 h-8 flex items-center justify-center glass-effect border border-white/20 rounded-full hover:bg-white/10 transition-all duration-300"><svg class="w-4 h-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"></path></svg></a>
-                            </div>
-                        </div>
-
-                    </div>
-                </div>
-            </div>
-        </section>
-
-
-        <!-- ============== SKILLS PAGE ============== -->
-        <section data-page="skills" class="page-section hidden">
-            <div class="container mx-auto px-6">
-                <h2 class="text-3xl md:text-4xl font-bold text-center mb-12 animate-on-scroll fade-in-up">
-                    <span class="text-gray-500">03.</span> Skills & Proficiencies 🛠️
-                </h2>
-                <div class="max-w-5xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-8 text-left">
-                    
-                    <!-- Card 1: Cybersecurity Domains -->
-                    <div class="glass-effect border border-white/10 rounded-lg p-6 h-full animate-on-scroll fade-in-up">
-                        <h3 class="text-xl font-bold text-white mb-4">Cybersecurity Domains</h3>
-                        <p class="text-gray-400 mb-4 font-mono text-sm">Core areas of my cybersecurity focus and expertise.</p>
-                        <ul class="space-y-2 text-gray-300 font-mono text-sm">
-                            <li class="flex items-center"><span class="text-cyan-400 mr-3">◆</span>Web Application Pentesting</li>
-                            <li class="flex items-center"><span class="text-cyan-400 mr-3">◆</span>Network Security & Pentesting</li>
-                            <li class="flex items-center"><span class="text-cyan-400 mr-3">◆</span>Digital Forensics & Incident Response</li>
-                            <li class="flex items-center"><span class="text-cyan-400 mr-3">◆</span>Cryptography & Steganography</li>
-                            <li class="flex items-center"><span class="text-cyan-400 mr-3">◆</span>Reverse Engineering & Malware Analysis</li>
-                            <li class="flex items-center"><span class="text-cyan-400 mr-3">◆</span>OSINT (Open-Source Intelligence)</li>
-                            <li class="flex items-center"><span class="text-cyan-400 mr-3">◆</span>Cloud Security</li>
-                             <li class="flex items-center"><span class="text-cyan-400 mr-3">◆</span>Threat Intelligence</li>
-                        </ul>
-                    </div>
-
-                    <!-- Card 2: Tools & Technologies -->
-                    <div class="glass-effect border border-white/10 rounded-lg p-6 h-full animate-on-scroll fade-in-up">
-                        <h3 class="text-xl font-bold text-white mb-4">Tools & Technologies</h3>
-                         <p class="text-gray-400 mb-4 font-mono text-sm">The arsenal of tools I use for analysis and exploitation.</p>
-                        <div class="flex flex-wrap gap-3 font-mono text-sm">
-                           <span class="bg-gray-800/50 px-3 py-1 rounded">Wireshark</span>
-                           <span class="bg-gray-800/50 px-3 py-1 rounded">Nmap</span>
-                           <span class="bg-gray-800/50 px-3 py-1 rounded">Burp Suite</span>
-                           <span class="bg-gray-800/50 px-3 py-1 rounded">Metasploit</span>
-                           <span class="bg-gray-800/50 px-3 py-1 rounded">Linux (Kali, Ubuntu)</span>
-                           <span class="bg-gray-800/50 px-3 py-1 rounded">YARA</span>
-                           <span class="bg-gray-800/50 px-3 py-1 rounded">Ghidra</span>
-                           <span class="bg-gray-800/50 px-3 py-1 rounded">Volatility</span>
-                           <span class="bg-gray-800/50 px-3 py-1 rounded">Autopsy</span>
-                           <span class="bg-gray-800/50 px-3 py-1 rounded">John the Ripper</span>
-                           <span class="bg-gray-800/50 px-3 py-1 rounded">GDB</span>
-                           <span class="bg-gray-800/50 px-3 py-1 rounded">Docker</span>
-                        </div>
-                    </div>
-
-                    <!-- Card 3: Programming & Languages -->
-                    <div class="glass-effect border border-white/10 rounded-lg p-6 h-full animate-on-scroll fade-in-up">
-                        <h3 class="text-xl font-bold text-white mb-4">Programming & Languages</h3>
-                         <p class="text-gray-400 mb-4 font-mono text-sm">Languages I'm proficient in, both for scripting and communication.</p>
-                         <h4 class="font-bold text-gray-200 mt-4 mb-2 font-mono text-sm uppercase">Scripting</h4>
-                         <div class="flex flex-wrap gap-3 font-mono text-sm mb-4">
-                            <span class="bg-gray-800/50 px-3 py-1 rounded">Python</span>
-                            <span class="bg-gray-800/50 px-3 py-1 rounded">Bash</span>
-                         </div>
-                         <h4 class="font-bold text-gray-200 mt-4 mb-2 font-mono text-sm uppercase">Spoken</h4>
-                         <div class="flex flex-wrap gap-3 font-mono text-sm">
-                           <span class="bg-gray-800/50 px-3 py-1 rounded">English</span>
-                           <span class="bg-gray-800/50 px-3 py-1 rounded">Tamil</span>
-                           <span class="bg-gray-800/50 px-3 py-1 rounded">Hindi</span>
-                        </div>
-                    </div>
-                    
-                    <!-- Card 4: Soft Skills -->
-                    <div class="glass-effect border border-white/10 rounded-lg p-6 h-full animate-on-scroll fade-in-up">
-                        <h3 class="text-xl font-bold text-white mb-4">Soft Skills</h3>
-                        <p class="text-gray-400 mb-4 font-mono text-sm">Essential personal attributes for effective teamwork and problem-solving.</p>
-                        <ul class="space-y-2 text-gray-300 font-mono text-sm">
-                            <li class="flex items-center"><span class="text-cyan-400 mr-3">◆</span>Analytical Problem-Solving</li>
-                            <li class="flex items-center"><span class="text-cyan-400 mr-3">◆</span>Collaborative Teamwork</li>
-                            <li class="flex items-center"><span class="text-cyan-400 mr-3">◆</span>Meticulous Attention to Detail</li>
-                            <li class="flex items-center"><span class="text-cyan-400 mr-3">◆</span>Clear & Concise Communication</li>
-                            <li class="flex items-center"><span class="text-cyan-400 mr-3">◆</span>Ethical Mindset & Integrity</li>
-                            <li class="flex items-center"><span class="text-cyan-400 mr-3">◆</span>Adaptability & Quick Learning</li>
-                            <li class="flex items-center"><span class="text-cyan-400 mr-3">◆</span>Time Management & Prioritization</li>
-                             <li class="flex items-center"><span class="text-cyan-400 mr-3">◆</span>Technical Report Writing</li>
-                        </ul>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <!-- ============== PROJECTS PAGE ============== -->
-        <section data-page="projects" class="page-section hidden">
-            <div class="container mx-auto px-6">
-                 <h2 class="text-3xl md:text-4xl font-bold text-center mb-12 animate-on-scroll fade-in-up">
-                    <span class="text-gray-500">04.</span> Projects 📂
-                </h2>
-                <div class="grid md:grid-cols-2 gap-8 max-w-5xl mx-auto">
-                    
-                    <!-- Project Card -->
-                    <div class="glass-effect border border-white/10 rounded-lg overflow-hidden flex flex-col group animate-on-scroll fade-in-up">
-                        <div class="p-6 flex-grow">
-                            <h3 class="text-xl font-bold text-white mb-2">Malware Scanner</h3>
-                            <p class="text-gray-400 mb-4 text-sm">A tool that utilizes YARA rules to scan files and directories, identifying potential malware based on defined textual or binary patterns.</p>
-                             <div class="flex flex-wrap gap-2 mb-4 font-mono text-xs">
-                                <span class="bg-gray-800/50 px-2 py-1 rounded">Python</span>
-                                <span class="bg-gray-800/50 px-2 py-1 rounded">YARA</span>
-                            </div>
-                        </div>
-                        <div class="p-6 pt-0 mt-auto">
-                           <a href="https://github.com/bluekyyyy" target="_blank" class="inline-block glass-effect border border-white/20 hover:bg-white/10 text-white font-bold py-2 px-4 rounded-lg transition-all duration-300 text-sm">View Project</a>
-                        </div>
-                    </div>
-                    
-                    <!-- Project Card 2 -->
-                    <div class="glass-effect border border-white/10 rounded-lg overflow-hidden flex flex-col group animate-on-scroll fade-in-up">
-                         <div class="p-6 flex-grow">
-                            <h3 class="text-xl font-bold text-white mb-2">AuraCrypt</h3>
-                            <p class="text-gray-400 mb-4 text-sm">A secure file sender application that encrypts files using the AES (Advanced Encryption Standard) algorithm before transmission, ensuring data confidentiality.</p>
-                            <div class="flex flex-wrap gap-2 mb-4 font-mono text-xs">
-                                <span class="bg-gray-800/50 px-2 py-1 rounded">Python</span>
-                                <span class="bg-gray-800/50 px-2 py-1 rounded">Cryptography</span>
-                                <span class="bg-gray-800/50 px-2 py-1 rounded">AES</span>
-                            </div>
-                        </div>
-                        <div class="p-6 pt-0 mt-auto">
-                            <a href="https://github.com/bluekyyyy" target="_blank" class="inline-block glass-effect border border-white/20 hover:bg-white/10 text-white font-bold py-2 px-4 rounded-lg transition-all duration-300 text-sm">View Project</a>
-                        </div>
-                    </div>
-                    <!-- Project Card 3 -->
-                    <div class="glass-effect border border-white/10 rounded-lg overflow-hidden flex flex-col group animate-on-scroll fade-in-up">
-                        <div class="p-6 flex-grow">
-                           <h3 class="text-xl font-bold text-white mb-2">Phishing Campaign Simulator</h3>
-                           <p class="text-gray-400 mb-4 text-sm">A platform to create and launch simulated phishing campaigns to train employees and test organizational security awareness against social engineering attacks.</p>
-                            <div class="flex flex-wrap gap-2 mb-4 font-mono text-xs">
-                               <span class="bg-gray-800/50 px-2 py-1 rounded">Python</span>
-                               <span class="bg-gray-800/50 px-2 py-1 rounded">Flask</span>
-                               <span class="bg-gray-800/50 px-2 py-1 rounded">SMTP</span>
-                           </div>
-                       </div>
-                       <div class="p-6 pt-0 mt-auto">
-                          <a href="https://github.com/bluekyyyy" target="_blank" class="inline-block glass-effect border border-white/20 hover:bg-white/10 text-white font-bold py-2 px-4 rounded-lg transition-all duration-300 text-sm">View Project</a>
-                       </div>
-                   </div>
-                   <!-- Project Card 4 -->
-                   <div class="glass-effect border border-white/10 rounded-lg overflow-hidden flex flex-col group animate-on-scroll fade-in-up">
-                        <div class="p-6 flex-grow">
-                           <h3 class="text-xl font-bold text-white mb-2">Network Intrusion Detection System</h3>
-                           <p class="text-gray-400 mb-4 text-sm">A Python-based NIDS that captures and analyzes network traffic in real-time using Scapy, detecting suspicious activities like port scanning and DoS attacks.</p>
-                           <div class="flex flex-wrap gap-2 mb-4 font-mono text-xs">
-                               <span class="bg-gray-800/50 px-2 py-1 rounded">Python</span>
-                               <span class="bg-gray-800/50 px-2 py-1 rounded">Scapy</span>
-                               <span class="bg-gray-800/50 px-2 py-1 rounded">Socket</span>
-                           </div>
-                       </div>
-                       <div class="p-6 pt-0 mt-auto">
-                           <a href="https://github.com/bluekyyyy" target="_blank" class="inline-block glass-effect border border-white/20 hover:bg-white/10 text-white font-bold py-2 px-4 rounded-lg transition-all duration-300 text-sm">View Project</a>
-                       </div>
-                   </div>
-                </div>
-            </div>
-        </section>
+  <!-- ACHIEVEMENTS -->
+  <div class="sec-wrap" id="achievements">
+    <section>
+      <div class="sec-label">005</div>
+      <h2>CTF Wins</h2>
+      <div class="ach-grid">
+        <div class="ach-card fu">
+          <h3>1st Place — WARGAMES CTF</h3>
+          <p>Hack The Planet Cyber Conclave. With teammates Aswath A V and Elavarasan Thandapani.</p>
+          <a href="https://www.linkedin.com/posts/arjun-balasubramanian_ctf-cybersecurity-owaspsathyabama-activity-7311840125066354688-bE22" target="_blank" class="ach-lnk">View Proof →</a>
+        </div>
+        <div class="ach-card fu">
+          <h3>1st Place — COSMOS CTF</h3>
+          <p>National Space Day Event. With Elavarasan Thandapani, Aswath A V, and Gunjan Soni.</p>
+          <a href="https://www.linkedin.com/posts/arjun-balasubramanian_cosmos-national-space-day-event-ctf-winners-activity-7233821453844963329-wrHc" target="_blank" class="ach-lnk">View Proof →</a>
+        </div>
+        <div class="ach-card fu">
+          <h3>2nd Place — HackOps CTF</h3>
+          <p>TechIgnite Sparkle Conclave. With teammate Nithila RajeshKumar.</p>
+          <a href="https://www.linkedin.com/posts/arjun-balasubramanian_wrapped-up-hackops-ctf-with-a-2nd-place-finish-activity-7308531533378654208-gQ47" target="_blank" class="ach-lnk">View Proof →</a>
+        </div>
         
-        <!-- ============== EXPERIENCE PAGE ============== -->
-        <section data-page="experience" class="page-section hidden">
-            <div class="container mx-auto px-6">
-                <h2 class="text-3xl md:text-4xl font-bold text-center mb-12 animate-on-scroll fade-in-up">
-                    <span class="text-gray-500">05.</span> Experience 💼
-                </h2>
-                <div class="max-w-3xl mx-auto space-y-8">
-                    <!-- Experience Item 1 -->
-                    <div class="glass-effect border border-white/10 rounded-lg p-6 animate-on-scroll fade-in-up">
-                        <h3 class="text-lg font-bold text-white">Cybersecurity Intern</h3>
-                        <p class="font-mono text-gray-400 text-sm mb-3">SecureNet Solutions | Jun 2024 - Aug 2024</p>
-                        <ul class="list-disc list-inside text-gray-300 text-sm space-y-2">
-                            <li>Assisted in vulnerability assessments and penetration testing for client web applications.</li>
-                            <li>Monitored network traffic for suspicious activities using SIEM tools.</li>
-                            <li>Contributed to incident response reports and documentation.</li>
-                        </ul>
-                    </div>
-                    <!-- Experience Item 2 -->
-                    <div class="glass-effect border border-white/10 rounded-lg p-6 animate-on-scroll fade-in-up">
-                        <h3 class="text-lg font-bold text-white">Capture The Flag (CTF) Team Lead</h3>
-                        <p class="font-mono text-gray-400 text-sm mb-3">Binary Misfits | Jan 2024 - Present</p>
-                        <ul class="list-disc list-inside text-gray-300 text-sm space-y-2">
-                            <li>Organize and lead the team in various national and international CTF competitions.</li>
-                            <li>Specialize in Web, Crypto, and Forensics challenges, consistently placing in top ranks.</li>
-                            <li>Mentor junior members and develop weekly training materials and custom challenges.</li>
-                        </ul>
-                    </div>
-                    <!-- Experience Item 3 -->
-                    <div class="glass-effect border border-white/10 rounded-lg p-6 animate-on-scroll fade-in-up">
-                        <h3 class="text-lg font-bold text-white">Freelance Security Consultant</h3>
-                        <p class="font-mono text-gray-400 text-sm mb-3">Self-Employed | 2023 - Present</p>
-                        <ul class="list-disc list-inside text-gray-300 text-sm space-y-2">
-                            <li>Conducted security audits for small businesses' websites, identifying critical vulnerabilities.</li>
-                            <li>Provided actionable recommendations for hardening server configurations and patching software.</li>
-                            <li>Wrote custom Python and Bash scripts for automating security checks and log analysis.</li>
-                        </ul>
-                    </div>
-                     <!-- Experience Item 4 -->
-                    <div class="glass-effect border border-white/10 rounded-lg p-6 animate-on-scroll fade-in-up">
-                        <h3 class="text-lg font-bold text-white">IT Support Volunteer</h3>
-                        <p class="font-mono text-gray-400 text-sm mb-3">Sathyabama University Tech Fest | Mar 2024</p>
-                        <ul class="list-disc list-inside text-gray-300 text-sm space-y-2">
-                            <li>Provided on-site technical support and network troubleshooting during a large-scale event.</li>
-                            <li>Ensured the security of event Wi-Fi networks and participant data.</li>
-                            <li>Helped manage user access controls for event-specific platforms and registration portals.</li>
-                        </ul>
-                    </div>
-                </div>
-            </div>
-        </section>
+      </div>
+    </section>
+  </div>
 
-        <!-- ============== ACHIEVEMENTS PAGE ============== -->
-        <section data-page="achievements" class="page-section hidden">
-             <div class="container mx-auto px-6">
-                 <h2 class="text-3xl md:text-4xl font-bold text-center mb-12 animate-on-scroll fade-in-up">
-                    <span class="text-gray-500">06.</span> Achievements & CTF Wins 🏆
-                </h2>
-                <div class="max-w-4xl mx-auto space-y-8">
-                    <div class="glass-effect border border-white/10 rounded-lg p-6 flex flex-col sm:flex-row justify-between items-center gap-4 animate-on-scroll fade-in-up">
-                        <div>
-                            <h3 class="text-lg font-bold text-gray-300">1st Place - WARGAMES CTF</h3>
-                            <p class="font-mono text-gray-400 text-sm">At Hack The Planet Cyber Conclave, with teammates Aswath A V and Elavarasan Thandapani.</p>
-                        </div>
-                        <a href="https://www.linkedin.com/posts/arjun-balasubramanian_ctf-cybersecurity-owaspsathyabama-activity-7311840125066354688-bE22?utm_source=share&utm_medium=member_desktop&rcm=ACoAAE0T4moBEaDyeg9UPYMfFANieEum2c-msL0" target="_blank" class="glass-effect border border-white/20 hover:bg-white/10 text-white font-bold py-2 px-4 rounded-lg transition-all duration-300 whitespace-nowrap text-sm">View Proof</a>
-                    </div>
-                     <div class="glass-effect border border-white/10 rounded-lg p-6 flex flex-col sm:flex-row justify-between items-center gap-4 animate-on-scroll fade-in-up">
-                         <div>
-                            <h3 class="text-lg font-bold text-gray-300">2nd Place - HackOps CTF</h3>
-                            <p class="font-mono text-gray-400 text-sm">At TechIgnite Sparkle Conclave, with teammate Nithila RajeshKumar.</p>
-                        </div>
-                        <a href="https://www.linkedin.com/posts/arjun-balasubramanian_wrapped-up-hackops-ctf-with-a-2nd-place-finish-activity-7308531533378654208-gQ47?utm_source=share&utm_medium=member_desktop&rcm=ACoAAE0T4moBEaDyeg9UPYMfFANieEum2c-msL0" target="_blank" class="glass-effect border border-white/20 hover:bg-white/10 text-white font-bold py-2 px-4 rounded-lg transition-all duration-300 whitespace-nowrap text-sm">View Proof</a>
-                    </div>
-                     <div class="glass-effect border border-white/10 rounded-lg p-6 flex flex-col sm:flex-row justify-between items-center gap-4 animate-on-scroll fade-in-up">
-                         <div>
-                            <h3 class="text-lg font-bold text-gray-300">Winners - COSMOS CTF</h3>
-                            <p class="font-mono text-gray-400 text-sm">A National Space Day Event, with teammates Elavarasan Thandapani, Aswath A V, and Gunjan Soni.</p>
-                        </div>
-                        <a href="https://www.linkedin.com/posts/arjun-balasubramanian_cosmos-national-space-day-event-ctf-winners-activity-7233821453844963329-wrHc?utm_source=share&utm_medium=member_desktop&rcm=ACoAAE0T4moBEaDyeg9UPYMfFANieEum2c-msL0" target="_blank" class="glass-effect border border-white/20 hover:bg-white/10 text-white font-bold py-2 px-4 rounded-lg transition-all duration-300 whitespace-nowrap text-sm">View Proof</a>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <!-- ============== CERTIFICATES PAGE ============== -->
-        <section data-page="certificates" class="page-section hidden">
-            <div class="container mx-auto px-6">
-                 <h2 class="text-3xl md:text-4xl font-bold text-center mb-12 animate-on-scroll fade-in-up">
-                    <span class="text-gray-500">07.</span> Certificates 📜
-                </h2>
-                <div class="grid md:grid-cols-2 gap-8 max-w-4xl mx-auto">
-                    
-                    <!-- Certificate Card -->
-                    <div class="glass-effect border border-white/10 rounded-lg overflow-hidden flex flex-col group text-center animate-on-scroll fade-in-up">
-                        <div class="p-4">
-                            <img src="/assets/certificate1.png" alt="Google Cybersecurity Certificate" class="w-full h-auto rounded-md mb-4 border border-gray-700">
-                            <h3 class="text-base font-bold text-white mb-2">Google Cybersecurity Certificate</h3>
-                        </div>
-                        <div class="p-4 pt-0 mt-auto">
-                           <a href="/assets/googlecertificate.pdf" download="Google_Cybersecurity_Certificate.pdf" class="inline-flex items-center justify-center gap-2 glass-effect border border-white/20 hover:bg-white/10 text-white font-bold py-2 px-4 rounded-lg transition-all duration-300 text-sm">
-                               <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
-                               Download
-                           </a>
-                        </div>
-                    </div>
-
-                    <!-- Certificate Card 2 -->
-                    <div class="glass-effect border border-white/10 rounded-lg overflow-hidden flex flex-col group text-center animate-on-scroll fade-in-up">
-                        <div class="p-4">
-                            <img src="https://placehold.co/600x400/1a1a1a/ffffff?text=TryHackMe+Jr+Pentester" alt="TryHackMe Jr Penetration Tester Certificate" class="w-full h-auto rounded-md mb-4 border border-gray-700">
-                            <h3 class="text-base font-bold text-white mb-2">TryHackMe - Jr Penetration Tester</h3>
-                        </div>
-                        <div class="p-4 pt-0 mt-auto">
-                           <a href="#" class="inline-flex items-center justify-center gap-2 glass-effect border border-white/20 hover:bg-white/10 text-white font-bold py-2 px-4 rounded-lg transition-all duration-300 text-sm">
-                               <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
-                               Download
-                           </a>
-                        </div>
-                    </div>
-                    <!-- Certificate Card 3 -->
-                    <div class="glass-effect border border-white/10 rounded-lg overflow-hidden flex flex-col group text-center animate-on-scroll fade-in-up">
-                        <div class="p-4">
-                            <img src="https://placehold.co/600x400/1a1a1a/ffffff?text=OSCP+(In+Progress)" alt="OSCP Certificate In Progress" class="w-full h-auto rounded-md mb-4 border border-gray-700">
-                            <h3 class="text-base font-bold text-white mb-2">OSCP (In Progress)</h3>
-                        </div>
-                        <div class="p-4 pt-0 mt-auto">
-                           <a href="#" class="inline-flex items-center justify-center gap-2 glass-effect border border-white/20 text-white font-bold py-2 px-4 rounded-lg cursor-not-allowed opacity-50 text-sm">
-                               <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
-                               Download
-                           </a>
-                        </div>
-                    </div>
-                     <!-- Certificate Card 4 -->
-                    <div class="glass-effect border border-white/10 rounded-lg overflow-hidden flex flex-col group text-center animate-on-scroll fade-in-up">
-                        <div class="p-4">
-                            <img src="https://placehold.co/600x400/1a1a1a/ffffff?text=CEH+(In+Progress)" alt="CEH Certificate In Progress" class="w-full h-auto rounded-md mb-4 border border-gray-700">
-                            <h3 class="text-base font-bold text-white mb-2">CEH (In Progress)</h3>
-                        </div>
-                        <div class="p-4 pt-0 mt-auto">
-                           <a href="#" class="inline-flex items-center justify-center gap-2 glass-effect border border-white/20 text-white font-bold py-2 px-4 rounded-lg cursor-not-allowed opacity-50 text-sm">
-                               <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
-                               Download
-                           </a>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <!-- ============== CONTACT PAGE ============== -->
-        <section data-page="contact" class="page-section hidden">
-            <div class="container mx-auto px-6 max-w-2xl text-center">
-                 <h2 class="text-3xl md:text-4xl font-bold text-center mb-4 animate-on-scroll fade-in-up">
-                    <span class="text-gray-500">08.</span> Get In Touch 📧
-                </h2>
-                <p class="text-gray-400 mb-8 text-sm animate-on-scroll fade-in-up" style="transition-delay: 100ms;">
-                    I'm currently open to new opportunities and collaborations. Whether you have a question or just want to say hi, feel free to reach out.
-                </p>
-                <form action="https://formspree.io/f/xyzjqlqn" method="POST" class="w-full max-w-lg mx-auto text-left animate-on-scroll fade-in-up" style="transition-delay: 200ms;">
-                    <div class="flex flex-wrap -mx-3 mb-6">
-                        <div class="w-full md:w-1/2 px-3 mb-6 md:mb-0">
-                            <label class="block uppercase tracking-wide text-gray-400 text-xs font-bold mb-2" for="grid-first-name">Name</label>
-                            <input class="appearance-none block w-full bg-gray-900/50 text-gray-300 border border-gray-700 rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-gray-800" id="grid-first-name" type="text" name="name" required>
-                        </div>
-                        <div class="w-full md:w-1/2 px-3">
-                            <label class="block uppercase tracking-wide text-gray-400 text-xs font-bold mb-2" for="grid-email">Email</label>
-                            <input class="appearance-none block w-full bg-gray-900/50 text-gray-300 border border-gray-700 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-gray-800 focus:border-gray-500" id="grid-email" type="email" name="email" required>
-                        </div>
-                    </div>
-                    <div class="flex flex-wrap -mx-3 mb-6">
-                        <div class="w-full px-3">
-                            <label class="block uppercase tracking-wide text-gray-400 text-xs font-bold mb-2" for="grid-message">Message</label>
-                            <textarea class=" no-resize appearance-none block w-full bg-gray-900/50 text-gray-300 border border-gray-700 rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-gray-800 focus:border-gray-500 h-48 resize-none" id="grid-message" name="message" required></textarea>
-                        </div>
-                    </div>
-                    <div class="md:flex md:items-center">
-                        <button class="w-full glass-effect border border-white/20 hover:bg-white/10 focus:shadow-outline focus:outline-none text-white font-bold py-3 px-4 rounded-lg transition-all duration-300" type="submit">
-                            Send Message
-                        </button>
-                    </div>
-                </form>
-            </div>
-        </section>
-    </main>
-
-    <!-- ============== FOOTER ============== -->
-    <footer class="py-8">
-        <div class="container mx-auto px-6 text-center text-gray-400">
-            <div class="flex justify-center space-x-6 mb-4">
-                <a href="https://github.com/bluekyyyy" target="_blank" class="hover:text-white transition-colors" title="GitHub">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-6 h-6"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"></path></svg>
-                </a>
-                <a href="https://www.linkedin.com/in/arjun-balasubramanian/" target="_blank" class="hover:text-white transition-colors" title="LinkedIn">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-6 h-6"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"></path><rect x="2" y="9" width="4" height="12"></rect><circle cx="4" cy="4" r="2"></circle></svg>
-                </a>
-                <a href="https://www.instagram.com/arjuuuun___" target="_blank" class="hover:text-white transition-colors" title="Instagram">
-                     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-6 h-6"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line></svg>
-                </a>
-            </div>
-            <p class="font-mono text-sm">&copy; 2024 Arjun.B. Designed & Built with inspiration.</p>
+  <!-- CERTS — emojis replaced with text abbreviations, nav link added -->
+  <div class="sec-wrap" id="certs">
+    <section>
+      <div class="sec-label">006</div>
+      <h2>Certifications</h2>
+      <div class="cert-grid">
+        <div class="cert-card fu">
+          <h3>SEC1 - TryHackMe</h3>
+          <span class="badge done">Completed</span><br>
+          <a href="/assets/googlecertificate.pdf" download class="cert-dl">↓ Download</a>
         </div>
-    </footer>
+        <div class="cert-card fu">
+          <h3>Google cybersecurity certificate</h3>
+          <span class="badge done">Completed</span><br>
+          <a href="/assets/googlecertificate.pdf" class="cert-dl">↓ Download</a>
+        </div>
+        <!-- <div class="cert-card fu">
+          <h3>OSCP</h3>
+          <span class="badge wip">In Progress</span><br>
+          <span style="font-family:var(--mono);font-size:.6rem;color:var(--muted)">Not yet available</span>
+        </div>
+        <div class="cert-card fu">
+          <h3>CEH — Certified Ethical Hacker</h3>
+          <span class="badge wip">In Progress</span><br>
+          <span style="font-family:var(--mono);font-size:.6rem;color:var(--muted)">Not yet available</span>
+        </div> -->
+      </div>
+    </section>
+  </div>
 
-    <script>
-        document.addEventListener('DOMContentLoaded', () => {
+  <!-- TEAM -->
+  <div class="sec-wrap" id="team">
+    <section>
+      <div class="sec-label">007</div>
+      <h2>Team — Binary Misfits</h2>
+      <p style="color:var(--text2);font-size:.88rem;margin-bottom:2rem;line-height:1.75">CTF-focused cybersecurity crew specialising in Exploit Development, Reverse Engineering, and Digital Forensics. <span style="color:var(--accent)">Est. 2024.</span></p>
+      <div class="team-grid">
+        <div class="team-card fu"><div class="t-ava"><img src="/assets/Arjun.jpg" alt="" onerror="this.parentElement.textContent='AB'"></div><h4>Arjun.B</h4><span class="t-handle">BLU3KY</span><div class="t-skills">CTF · Web · Stego · OSINT · Crypto</div></div>
+        <div class="team-card fu"><div class="t-ava"><img src="/assets/luna.JPG" alt="" onerror="this.parentElement.textContent='NR'"></div><h4>Nithila.R</h4><span class="t-handle">Luna</span><div class="t-skills">CTF · Web · Stego · Crypto</div></div>
+        <div class="team-card fu"><div class="t-ava"><img src="/assets/goushal.jpeg" alt="" onerror="this.parentElement.textContent='GK'"></div><h4>Goushal.K</h4><span class="t-handle">JellyBean</span><div class="t-skills">DFIR · Android · Stego</div></div>
+        <div class="team-card fu"><div class="t-ava"><img src="/assets/aswath.png" alt="" onerror="this.parentElement.textContent='AV'"></div><h4>Aswath.A V</h4><span class="t-handle">45HH</span><div class="t-skills">CTF · Crypto · Forensics</div></div>
+        <div class="team-card fu"><div class="t-ava"><img src="/assets/harish.jpg" alt="" onerror="this.parentElement.textContent='HK'"></div><h4>Harish.K P</h4><span class="t-handle">H4r15h</span><div class="t-skills">CTF · Android & IoT Pentesting</div></div>
+        <div class="team-card fu"><div class="t-ava">LS</div><h4>Lakshitha.S</h4><span class="t-handle">L4K1</span><div class="t-skills">CTF · Forensics · Crypto · Stego</div></div>
+        <div class="team-card fu"><div class="t-ava">PS</div><h4>Padmesh.S</h4><span class="t-handle">DUDU</span><div class="t-skills">CTF · Full Stack Dev</div></div>
+        <div class="team-card fu"><div class="t-ava">ET</div><h4>Elavarasan.T</h4><span class="t-handle">HexPh4r04h</span><div class="t-skills">CTF · RE · Pwn · DFIR</div></div>
+      </div>
+    </section>
+  </div>
 
-            // --- Single Page Application (SPA) Navigation ---
-            const pageSections = document.querySelectorAll('.page-section');
-            const allNavLinks = document.querySelectorAll('.nav-link');
-            const mobileMenu = document.getElementById('mobile-menu');
+  <!-- CONTACT -->
+  <div class="sec-wrap" id="contact">
+    <section>
+      <div class="sec-label">008</div>
+      <h2>Get In Touch</h2>
+      <p class="contact-intro">Open to opportunities, collaborations, and CTF partnerships. Whether you have a challenge or just want to say hi — <strong>I'm all ears</strong>.</p>
+      <form action="https://formspree.io/f/xyzjqlqn" method="POST" class="cf">
+        <div class="cf-row">
+          <div class="fg"><label for="name">Name</label><input type="text" id="name" name="name" placeholder="Your name" required></div>
+          <div class="fg"><label for="email">Email</label><input type="email" id="email" name="email" placeholder="your@email.com" required></div>
+        </div>
+        <div class="fg"><label for="msg">Message</label><textarea id="msg" name="message" placeholder="What's on your mind?" required></textarea></div>
+        <button type="submit" class="btn-p" style="align-self:flex-start">Send Message →</button>
+      </form>
+    </section>
+  </div>
 
-            function showPage(targetId) {
-                pageSections.forEach(section => section.classList.add('hidden'));
-                const targetSection = document.querySelector(`.page-section[data-page="${targetId}"]`);
-                if (targetSection) targetSection.classList.remove('hidden');
+  <footer>
+    <div class="ft-l">&copy; 2025 <strong>Arjun.B</strong> — Built with precision.</div>
+    <div class="ft-r">
+      <a href="https://github.com/bluekyyyy" target="_blank">GitHub</a>
+      <a href="https://www.linkedin.com/in/arjun-balasubramanian/" target="_blank">LinkedIn</a>
+      <a href="https://www.instagram.com/arjuuuun___" target="_blank">Instagram</a>
+    </div>
+  </footer>
 
-                allNavLinks.forEach(link => {
-                    link.classList.remove('active');
-                    if (link.dataset.target === targetId) link.classList.add('active');
-                });
-                
-                window.scrollTo(0, 0); 
-            }
+</div>
 
-            allNavLinks.forEach(link => {
-                link.addEventListener('click', (e) => {
-                    e.preventDefault();
-                    const targetId = link.dataset.target;
-                    if(targetId) {
-                        showPage(targetId);
-                        mobileMenu.classList.add('translate-x-full');
-                    }
-                });
-            });
+<script>
+// ── WEBGL BACKGROUND ──
+(function(){
+  const c = document.getElementById('bgc');
+  const gl = c.getContext('webgl');
+  if(!gl) return;
 
-            // Show home page initially and animate its content
-            showPage('home');
-            document.querySelectorAll('[data-page="home"] .animate-on-scroll').forEach(el => {
-                el.classList.add('is-visible');
-            });
+  const vs = `attribute vec2 p; void main(){gl_Position=vec4(p,0,1);}`;
+  const fs = `
+    precision mediump float;
+    uniform vec2 res, mouse;
+    uniform float time;
 
+    float hash(vec2 p){return fract(sin(dot(p,vec2(127.1,311.7)))*43758.5453);}
+    float noise(vec2 p){
+      vec2 i=floor(p),f=fract(p);
+      f=f*f*(3.-2.*f);
+      return mix(mix(hash(i),hash(i+vec2(1,0)),f.x),mix(hash(i+vec2(0,1)),hash(i+vec2(1,1)),f.x),f.y);
+    }
+    float fbm(vec2 p){
+      float v=0.,a=.5;
+      for(int i=0;i<4;i++){v+=a*noise(p);p=p*2.1+vec2(1.7,9.2);a*=.5;}
+      return v;
+    }
+    void main(){
+      vec2 uv=gl_FragCoord.xy/res;
+      vec2 m=mouse/res;
+      float t=time*.07;
 
-            document.getElementById('hamburger-btn').addEventListener('click', () => {
-                mobileMenu.classList.toggle('translate-x-full');
-            });
+      float n=fbm(uv*2.2+vec2(t*.5,t*.3));
 
+      float d=length(uv-m);
+      float glow=smoothstep(.65,0.,d)*.28;
 
-            // --- Scroll Animation Logic ---
-            const animatedElements = document.querySelectorAll('.animate-on-scroll');
+      vec2 g=abs(fract(uv*28.)-.5);
+      float grid=(1.-smoothstep(0.,.03,min(g.x,g.y)))*.055;
 
-            const observer = new IntersectionObserver((entries) => {
-                entries.forEach(entry => {
-                    if (entry.isIntersecting) {
-                        // For staggered animations, apply delay based on index
-                        const delay = parseInt(entry.target.dataset.staggerIndex || 0) * 100; // 100ms delay
-                        setTimeout(() => {
-                           entry.target.classList.add('is-visible');
-                        }, delay);
-                        observer.unobserve(entry.target);
-                    }
-                });
-            }, {
-                threshold: 0.1 // Trigger when 10% of the element is visible
-            });
-            
-            // Add stagger index to children of grid containers
-            document.querySelectorAll('.grid').forEach(grid => {
-                const children = grid.querySelectorAll('.animate-on-scroll');
-                children.forEach((child, index) => {
-                    child.dataset.staggerIndex = index;
-                });
-            });
-            
-            animatedElements.forEach(element => {
-                // Don't observe home elements, they are animated on load
-                if (!element.closest('[data-page="home"]')) {
-                    observer.observe(element);
-                }
-            });
+      float scan=abs(sin(uv.y*80.+t*5.))*.01;
 
+      float col=0.04 + n*.025 + glow + grid + scan;
+      gl_FragColor=vec4(vec3(col),1.);
+    }
+  `;
 
-            // --- WebGL Background ---
-            const canvas = document.getElementById('webgl-canvas');
-            const gl = canvas.getContext('webgl', { antialias: true, alpha: true });
+  function sh(t,s){const x=gl.createShader(t);gl.shaderSource(x,s);gl.compileShader(x);return x;}
+  const prog=gl.createProgram();
+  gl.attachShader(prog,sh(gl.VERTEX_SHADER,vs));
+  gl.attachShader(prog,sh(gl.FRAGMENT_SHADER,fs));
+  gl.linkProgram(prog);gl.useProgram(prog);
 
-            if (!gl) {
-                console.error("WebGL not supported, falling back to static background.");
-                document.body.style.backgroundColor = '#000000';
-                return;
-            }
+  const buf=gl.createBuffer();
+  gl.bindBuffer(gl.ARRAY_BUFFER,buf);
+  gl.bufferData(gl.ARRAY_BUFFER,new Float32Array([-1,-1,3,-1,-1,3]),gl.STATIC_DRAW);
+  const ap=gl.getAttribLocation(prog,'p');
+  gl.enableVertexAttribArray(ap);
+  gl.vertexAttribPointer(ap,2,gl.FLOAT,false,0,0);
 
-            const vertexShaderSource = `attribute vec2 position; void main() { gl_Position = vec4(position, 0.0, 1.0); }`;
-            const fragmentShaderSource = `
-                #ifdef GL_ES
-                precision mediump float;
-                #endif
-                uniform vec2 iResolution; uniform vec2 iMouse; uniform float iTime;
-                float rand(vec2 co){ return fract(sin(dot(co, vec2(12.9898,78.233))) * 43758.5453); }
-                vec2 rotate2D(vec2 p, float a){ float c=cos(a),s=sin(a); return mat2(c,-s,s,c)*p; }
-                void main() {
-                    vec2 uv = gl_FragCoord.xy/iResolution.xy;
-                    float aspect = iResolution.x/iResolution.y;
-                    vec2 p = uv*2.0-1.0; p.x*=aspect;
-                    vec2 pr = rotate2D(p, 0.785); pr.x/=aspect; vec2 uvRotated=pr*0.5+0.5;
-                    vec3 color1=vec3(0.1), color2=vec3(0.3), baseColor=mix(color1,color2,uvRotated.x);
-                    vec2 mouseUV = iMouse.xy/iResolution.xy;
-                    float d=length(uv-mouseUV), radius=0.6, softness=3.5;
-                    float spotlightIntensity=pow(max(0.0,1.0-d/radius),softness);
-                    float blindCount=24.0, stripe_phase=fract(uvRotated.x*blindCount);
-                    float band_falloff=pow(sin(stripe_phase*3.14159),1.5);
-                    float highlight=pow(fract(stripe_phase-0.2),64.0)*1.5;
-                    vec3 finalColor = baseColor*band_falloff*spotlightIntensity*2.2;
-                    finalColor += vec3(1.0)*highlight*spotlightIntensity;
-                    finalColor += (rand(gl_FragCoord.xy+iTime)-0.5)*0.2;
-                    gl_FragColor = vec4(finalColor, 1.0);
-                }`;
+  const uRes=gl.getUniformLocation(prog,'res');
+  const uMouse=gl.getUniformLocation(prog,'mouse');
+  const uTime=gl.getUniformLocation(prog,'time');
 
-            function createShader(gl, type, source) {
-                const shader = gl.createShader(type); gl.shaderSource(shader, source); gl.compileShader(shader);
-                if (!gl.getShaderParameter(shader, gl.COMPILE_STATUS)) {
-                    console.error('Shader error: ' + gl.getShaderInfoLog(shader)); gl.deleteShader(shader); return null;
-                } return shader;
-            }
+  let mx=window.innerWidth/2, my=window.innerHeight/2;
+  let smx=mx, smy=my;
+  document.addEventListener('mousemove',e=>{mx=e.clientX;my=window.innerHeight-e.clientY;});
+  document.addEventListener('touchmove',e=>{const t=e.touches[0];mx=t.clientX;my=window.innerHeight-t.clientY;},{passive:true});
 
-            const vertexShader = createShader(gl, gl.VERTEX_SHADER, vertexShaderSource);
-            const fragmentShader = createShader(gl, gl.FRAGMENT_SHADER, fragmentShaderSource);
-            const program = gl.createProgram(); gl.attachShader(program, vertexShader); gl.attachShader(program, fragmentShader); gl.linkProgram(program);
-            if (!gl.getProgramParameter(program, gl.LINK_STATUS)) { console.error('Program error: ' + gl.getProgramInfoLog(program)); return; }
-            gl.useProgram(program);
+  function resize(){c.width=window.innerWidth;c.height=window.innerHeight;gl.viewport(0,0,c.width,c.height);}
+  window.addEventListener('resize',resize);resize();
 
-            const positionAttributeLocation = gl.getAttribLocation(program, "position");
-            const resolutionUniformLocation = gl.getUniformLocation(program, "iResolution");
-            const mouseUniformLocation = gl.getUniformLocation(program, "iMouse");
-            const timeUniformLocation = gl.getUniformLocation(program, "iTime");
+  function loop(t){
+    smx+=(mx-smx)*.06; smy+=(my-smy)*.06;
+    gl.uniform2f(uRes,c.width,c.height);
+    gl.uniform2f(uMouse,smx,smy);
+    gl.uniform1f(uTime,t*.001);
+    gl.drawArrays(gl.TRIANGLES,0,3);
+    requestAnimationFrame(loop);
+  }
+  requestAnimationFrame(loop);
+})();
 
-            const positionBuffer = gl.createBuffer(); gl.bindBuffer(gl.ARRAY_BUFFER, positionBuffer);
-            const positions = [-1,-1, 1,-1, -1,1, -1,1, 1,-1, 1,1];
-            gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(positions), gl.STATIC_DRAW);
+// ── CURSOR ──
+const cur=document.getElementById('cur'), ring=document.getElementById('cur-ring');
+document.addEventListener('mousemove',e=>{
+  cur.style.left=e.clientX+'px'; cur.style.top=e.clientY+'px';
+  ring.style.left=e.clientX+'px'; ring.style.top=e.clientY+'px';
+});
+document.querySelectorAll('a,button').forEach(el=>{
+  el.addEventListener('mouseenter',()=>{cur.style.width='14px';cur.style.height='14px';ring.style.width='46px';ring.style.height='46px';});
+  el.addEventListener('mouseleave',()=>{cur.style.width='8px';cur.style.height='8px';ring.style.width='32px';ring.style.height='32px';});
+});
 
-            let targetMouse = { x: window.innerWidth/2, y: window.innerHeight/2 };
-            let currentMouse = { x: window.innerWidth/2, y: window.innerHeight/2 };
-            document.addEventListener('mousemove', e => { targetMouse.x = e.clientX; targetMouse.y = window.innerHeight - e.clientY; });
+// ── NAV ──
+const ham=document.getElementById('ham'), mob=document.getElementById('mob');
+ham.addEventListener('click',()=>{ham.classList.toggle('open');mob.classList.toggle('open');});
 
-            function resize() {
-                canvas.width = window.innerWidth; canvas.height = window.innerHeight;
-                gl.viewport(0, 0, gl.canvas.width, gl.canvas.height);
-            }
-            window.addEventListener('resize', resize); resize();
+function scrollToId(id){
+  const el=document.getElementById(id);
+  if(!el) return;
+  const navH=document.querySelector('.nav-wrap').offsetHeight;
+  const top=el.getBoundingClientRect().top+window.scrollY - navH - 12;
+  window.scrollTo({top, behavior:'smooth'});
+}
 
-            function render(time) {
-                time *= 0.001;
-                const easing = 0.05;
-                currentMouse.x += (targetMouse.x - currentMouse.x) * easing;
-                currentMouse.y += (targetMouse.y - currentMouse.y) * easing;
-                gl.clearColor(0,0,0,0); gl.clear(gl.COLOR_BUFFER_BIT);
-                gl.useProgram(program);
-                gl.enableVertexAttribArray(positionAttributeLocation);
-                gl.bindBuffer(gl.ARRAY_BUFFER, positionBuffer);
-                gl.vertexAttribPointer(positionAttributeLocation, 2, gl.FLOAT, false, 0, 0);
-                gl.uniform2f(resolutionUniformLocation, gl.canvas.width, gl.canvas.height);
-                gl.uniform2f(mouseUniformLocation, currentMouse.x, currentMouse.y);
-                gl.uniform1f(timeUniformLocation, time);
-                gl.drawArrays(gl.TRIANGLES, 0, 6);
-                requestAnimationFrame(render);
-            }
-            requestAnimationFrame(render);
-        });
-    </script>
+document.querySelectorAll('a[href^="#"]').forEach(a=>{
+  a.addEventListener('click',e=>{
+    const id=a.getAttribute('href').slice(1);
+    if(!id) return;
+    e.preventDefault();
+    scrollToId(id);
+    ham.classList.remove('open'); mob.classList.remove('open');
+  });
+});
+
+// Active nav on scroll — now includes #certs
+const scrollTargets=[...document.querySelectorAll('.sec-wrap[id], #hero')];
+const navAs=document.querySelectorAll('.nav-links a');
+const io=new IntersectionObserver(entries=>{
+  entries.forEach(e=>{
+    if(e.isIntersecting){
+      navAs.forEach(a=>a.classList.remove('active'));
+      const a=document.querySelector(`.nav-links a[href="#${e.target.id}"]`);
+      if(a) a.classList.add('active');
+    }
+  });
+},{threshold:0.25,rootMargin:'-60px 0px -40% 0px'});
+scrollTargets.forEach(s=>io.observe(s));
+
+// ── SCROLL FADE-IN ──
+const fo=new IntersectionObserver(entries=>{
+  entries.forEach(e=>{if(e.isIntersecting){e.target.classList.add('vis');fo.unobserve(e.target);}});
+},{threshold:0.08});
+document.querySelectorAll('.fu').forEach(el=>fo.observe(el));
+</script>
 </body>
-
 </html>
-
